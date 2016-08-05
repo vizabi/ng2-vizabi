@@ -3,7 +3,7 @@ import {
   CORE_DIRECTIVES, FORM_DIRECTIVES, NgClass
 } from '@angular/common';
 
-import {Component} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 
 import {bootstrap} from '@angular/platform-browser-dynamic';
 
@@ -39,6 +39,7 @@ let gettingStarted = require('./getting-started.md');
     </div>
   </footer>
   `,
+  encapsulation: ViewEncapsulation.None,
   directives: [
     NgClass,
     VizabiSection

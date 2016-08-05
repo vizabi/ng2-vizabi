@@ -1,8 +1,7 @@
 /// <reference path="../../tsd.d.ts" />
 
 import {CORE_DIRECTIVES} from '@angular/common';
-import {Component} from '@angular/core';
-
+import {Component, ViewEncapsulation} from '@angular/core';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap';
 import {BubbleChartDemo} from './vizabi/bubble-chart-demo';
 
@@ -72,6 +71,7 @@ tabDesc.forEach(desc => {
     </div>
   </section>
   `,
+  encapsulation: ViewEncapsulation.None,
   directives: [BubbleChartDemo, TAB_DIRECTIVES, CORE_DIRECTIVES]
 })
 export class VizabiSection {

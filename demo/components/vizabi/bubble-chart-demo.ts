@@ -6,6 +6,10 @@ import {
 
 import {Component} from '@angular/core';
 import {vizabiWrapper} from '../../../components/index';
+import  {query, metadata, translations} from './fixtures/sg';
+
+const ddfCsvReader = require('vizabi-ddfcsv-reader');
+const FrontendFileReader = ddfCsvReader.FrontendFileReader;
 
 let template = require('./bubble-chart-demo.html');
 
@@ -15,4 +19,23 @@ let template = require('./bubble-chart-demo.html');
   directives: [vizabiWrapper, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 export class BubbleChartDemo {
+  private readerModuleObject: any;
+  private readerModuleGetMethod: string;
+  private readerModuleParams: Array<any>;
+  private readerName: string;
+  private query: any;
+  private metadata: any;
+  private translations: any;
+  private chartType: string;
+
+  constructor() {
+    this.readerModuleObject = ddfCsvReader;
+    this.readerModuleGetMethod = 'getDDFCsvReaderObject';
+    this.readerModuleParams = [new FrontendFileReader()];
+    this.readerName = 'ddf1-csv-ext';
+    this.query = query;
+    this.metadata = metadata;
+    this.translations = translations;
+    this.chartType = 'BubbleChart';
+  }
 }
