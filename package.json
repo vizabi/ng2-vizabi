@@ -1,0 +1,75 @@
+{
+  "name": "ng2-vizabi",
+  "version": "0.15.1-0",
+  "description": "angular2 vizabi component",
+  "scripts": {
+    "deploy": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
+    "prepublish": "gulp clean && tsc",
+    "prestart": "npm install",
+    "server": "webpack-dev-server --hot --inline --colors --display-error-details --display-cached",
+    "start": "npm run server",
+    "test": "gulp lint"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "components",
+    "tsd.d.ts",
+    "typings-persist"
+  ],
+  "keywords": [
+    "angular2",
+    "bootstrap",
+    "angularjs",
+    "twitter-bootstrap"
+  ],
+  "author": "Vyacheslav Chub <vyacheslav.chub@valor-software.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/valor-software/ng2-vizabi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/valor-software/ng2-vizabi/issues"
+  },
+  "homepage": "https://github.com/valor-software/ng2-vizabi#readme",
+  "dependencies": {
+    "@angular/common": "2.0.0-rc.4",
+    "@angular/compiler": "2.0.0-rc.4",
+    "@angular/core": "2.0.0-rc.4",
+    "@angular/forms": "^0.2.0",
+    "@angular/platform-browser": "^2.0.0-rc.4",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.4",
+    "reflect-metadata": "0.1.3",
+    "rxjs": "^5.0.0-beta.10",
+    "ts-loader": "0.8.2",
+    "zone.js": "0.6.11"
+  },
+  "devDependencies": {
+    "bootstrap": "3.3.6",
+    "clean-webpack-plugin": "0.1.9",
+    "eslint": "3.1.0",
+    "exports-loader": "0.6.3",
+    "file-loader": "0.9.0",
+    "gulp": "3.9.1",
+    "gulp-clean": "0.3.2",
+    "gulp-eslint": "3.0.1",
+    "gulp-size": "2.1.0",
+    "gulp-tsc": "1.2.0",
+    "gulp-tslint": "6.0.1",
+    "html-loader": "0.4.3",
+    "markdown-loader": "0.1.7",
+    "marked": "0.3.5",
+    "moment": "2.14.1",
+    "ng2-bootstrap": "1.0.23",
+    "pre-commit": "1.1.3",
+    "prismjs": "1.5.1",
+    "prismjs-loader": "0.0.3",
+    "raw-loader": "0.5.1",
+    "require-dir": "0.3.0",
+    "tslint": "3.13.0",
+    "typescript": "1.8.10",
+    "webpack": "1.13.1",
+    "webpack-dev-server": "1.14.1"
+  }
+}
