@@ -6,7 +6,7 @@ import {
 
 import {Component} from '@angular/core';
 import {vizabiWrapper} from '../../../components/index';
-import  {query, metadata, translations} from './fixtures/sg';
+import {query, metadata, translations} from './fixtures/sg';
 
 const ddfCsvReader = require('vizabi-ddfcsv-reader');
 const FrontendFileReader = ddfCsvReader.FrontendFileReader;
@@ -24,6 +24,7 @@ export class BubbleChartDemo {
   private readerModuleParams: Array<any>;
   private readerName: string;
   private query: any;
+  private queryHash: string;
   private metadata: any;
   private translations: any;
   private chartType: string;
@@ -34,6 +35,11 @@ export class BubbleChartDemo {
     this.readerModuleParams = [new FrontendFileReader()];
     this.readerName = 'ddf1-csv-ext';
     this.query = query;
+
+    const hashPos = location.href.indexOf('#');
+
+    this.queryHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
+
     this.metadata = metadata;
     this.translations = translations;
     this.chartType = 'BubbleChart';
