@@ -6,10 +6,9 @@ import {
 
 import {Component} from '@angular/core';
 import {vizabiWrapper} from '../../../components/index';
-import {query, metadata, translations} from './fixtures/sg';
 
-const ddfCsvReader = require('vizabi-ddfcsv-reader');
-const FrontendFileReader = ddfCsvReader.FrontendFileReader;
+const WSReader = require('vizabi-ws-reader').WSReader;
+const WS_SERVER = 'https://waffle-server-stage.gapminderdev.org';
 
 let template = require('./bubble-chart-demo.html');
 
@@ -25,21 +24,65 @@ export class BubbleChartDemo {
   private readerName: string;
   private model: any;
   private modelHash: string;
-  private metadata: any;
-  private translations: any;
+  private extResources: any;
   private chartType: string;
 
   constructor() {
     const hashPos = location.href.indexOf('#');
 
-    this.readerModuleObject = ddfCsvReader;
-    this.readerGetMethod = 'getDDFCsvReaderObject';
-    this.readerParams = [new FrontendFileReader()];
-    this.readerName = 'ddf1-csv-ext';
-    this.model = query;
+    this.readerModuleObject = new WSReader();
+    this.readerGetMethod = 'getReader';
+    this.readerParams = [];
+    this.readerName = 'ws-new-reader';
+    this.model = {
+      data: {
+        reader: 'ws-new-reader',
+        path: WS_SERVER + '/api/graphs/stats/vizabi-tools',
+        splash: true
+      },
+      ui: {
+        buttons: [
+          'colors',
+          'find',
+          'stack',
+          'show',
+          'moreoptions',
+          'fullscreen',
+          'presentation'
+        ],
+        dialogs: {
+          popup: [
+            'colors',
+            'find',
+            'stack',
+            'show',
+            'moreoptions'
+          ],
+          sidebar: [
+            'colors',
+            'find',
+            'stack'
+          ],
+          moreoptions: [
+            'opacity',
+            'speed',
+            'stack',
+            'axesmc',
+            'colors',
+            'presentation',
+            'about'
+          ]
+        }
+      }
+    };
     this.modelHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
-    this.metadata = metadata;
-    this.translations = translations;
     this.chartType = 'BubbleChart';
+    this.extResources = {
+      host: WS_SERVER + '/',
+      preloadPath: 'api/vizabi/',
+      dataPath: 'api/graphs/stats/vizabi-tools',
+      conceptpropsPath: WS_SERVER + '/api/vizabi/metadata.json',
+      translationPath: WS_SERVER + '/api/vizabi/translation/en.json'
+    };
   }
 }

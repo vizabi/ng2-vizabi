@@ -7,7 +7,7 @@
     "prepublish": "gulp clean && tsc",
     "prestart": "npm install",
     "server": "webpack-dev-server --hot --inline --colors --display-error-details --display-cached",
-    "start": "npm run server",
+    "start": "WS_HOST=https://waffle-server-dev.gapminderdev.org WS_PORT=80 npm run server",
     "test": "gulp lint"
   },
   "main": "dist/index.js",
@@ -74,6 +74,7 @@
     "tslint": "3.13.0",
     "typescript": "1.8.10",
     "vizabi-ddfcsv-reader": "0.3.6",
+    "vizabi-ws-reader": "0.0.3",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1"
   }

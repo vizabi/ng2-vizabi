@@ -46,6 +46,9 @@ export class VizabiWrapper implements OnInit, OnDestroy {
     this.setExtResources();
     this.modelHashProcessing();
     this.persistentChangeProcessing(initialModel);
+
+    console.log(this.chartType, this.model);
+
     this.component = Vizabi(this.chartType, this.view, this.model);
   }
 
