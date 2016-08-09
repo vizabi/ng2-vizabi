@@ -13,6 +13,7 @@ const urlon = require('URLON');
     'readerName',
     'model',
     'modelHash',
+    'extResources',
     'metadata',
     'translations',
     'chartType'
@@ -25,6 +26,7 @@ export class VizabiWrapper implements OnInit, OnDestroy {
   private readerName: string;
   private model: any;
   private modelHash: string;
+  private extResources: any;
   private metadata: any;
   private translations: any;
   private chartType: string;
@@ -41,6 +43,7 @@ export class VizabiWrapper implements OnInit, OnDestroy {
     this.createView();
     this.readerProcessing();
     this.setMetadata();
+    this.setExtResources();
     this.modelHashProcessing();
     this.persistentChangeProcessing(initialModel);
     this.component = Vizabi(this.chartType, this.view, this.model);
@@ -71,15 +74,22 @@ export class VizabiWrapper implements OnInit, OnDestroy {
   }
 
   private setMetadata() {
-    const translations = this.translations;
-    const metadata = this.metadata;
+    if (this.translations || this.metadata) {
+      const translations = this.translations;
+      const metadata = this.metadata;
 
-    Vizabi.Tool.define('preload', function (promise) {
-      Vizabi._globals.conceptprops = metadata;
+      Vizabi.Tool.define('preload', function (promise) {
+        if (metadata) {
+          Vizabi._globals.conceptprops = metadata;
+        }
 
-      this.model.language.strings.set(this.model.language.id, translations);
-      promise.resolve();
-    });
+        if (translations) {
+          this.model.language.strings.set(this.model.language.id, translations);
+        }
+
+        promise.resolve();
+      });
+    }
   }
 
   private modelHashProcessing() {
@@ -101,6 +111,12 @@ export class VizabiWrapper implements OnInit, OnDestroy {
       // hack -> minimum query string
       minModelDiff.language = {};
       window.location.hash = urlon.stringify(minModelDiff);
+    }
+  }
+
+  private setExtResources() {
+    if (this.extResources) {
+      Vizabi._globals.ext_resources = this.extResources;
     }
   }
 }

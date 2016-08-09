@@ -19,6 +19,7 @@ import {vizabiWrapper} from 'ng2-vizabi';
     'readerName',
     'model',
     'modelHash',
+    'extResources',
     'metadata',
     'translations',
     'chartType'
@@ -33,7 +34,8 @@ import {vizabiWrapper} from 'ng2-vizabi';
   * `readerParams` (`?Array<any>`) - parameters for `readerGetMethod`; undefined by default
   * `readerName` (`?string`) - reader's name; undefined by default
   * `model` (`any`) - model for current `Vizabi` instance
-  * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default 
+  * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default
+  * `extResources` (`?any`) - extResources object (see `Vizabi._globals.ext_resources`)
   * `metadata` (`any`) - metadata for current `Vizabi` instance
   * `translations` (`any`) - translations for current `Vizabi` instance
   * `chartType` (`string`) - chart type for current `Vizabi` instance
