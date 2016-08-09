@@ -14,7 +14,7 @@ Native Angular2 directive for [Vizabi](https://github.com/Gapminder/vizabi) comp
 
   Alternatively, you can [download it in a ZIP file](https://github.com/VS-work/ng2-vizabi/archive/master.zip).
 
-2. More information regarding using of ***ng2-handsontable*** is located in
+2. More information regarding using of ***ng2-vizabi*** is located in
   [demo](http://VS-work.github.io/ng2-vizabi/) and [demo sources](https://github.com/VS-work/ng2-vizabi/tree/master/demo).
 
 ## API
