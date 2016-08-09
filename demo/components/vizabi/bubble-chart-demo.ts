@@ -20,26 +20,24 @@ let template = require('./bubble-chart-demo.html');
 })
 export class BubbleChartDemo {
   private readerModuleObject: any;
-  private readerModuleGetMethod: string;
-  private readerModuleParams: Array<any>;
+  private readerGetMethod: string;
+  private readerParams: Array<any>;
   private readerName: string;
-  private query: any;
-  private queryHash: string;
+  private model: any;
+  private modelHash: string;
   private metadata: any;
   private translations: any;
   private chartType: string;
 
   constructor() {
-    this.readerModuleObject = ddfCsvReader;
-    this.readerModuleGetMethod = 'getDDFCsvReaderObject';
-    this.readerModuleParams = [new FrontendFileReader()];
-    this.readerName = 'ddf1-csv-ext';
-    this.query = query;
-
     const hashPos = location.href.indexOf('#');
 
-    this.queryHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
-
+    this.readerModuleObject = ddfCsvReader;
+    this.readerGetMethod = 'getDDFCsvReaderObject';
+    this.readerParams = [new FrontendFileReader()];
+    this.readerName = 'ddf1-csv-ext';
+    this.model = query;
+    this.modelHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
     this.metadata = metadata;
     this.translations = translations;
     this.chartType = 'BubbleChart';

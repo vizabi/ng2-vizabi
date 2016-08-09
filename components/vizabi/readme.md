@@ -1,41 +1,56 @@
+### Overview
+
+Native Angular2 directive for `Vizabi` component. 
+
 ### Usage
 ```typescript
-import {handsontable} from 'ng2-handsontable';
+import {vizabiWrapper} from 'ng2-vizabi';
 ```
 
 ### Annotations
 ```typescript
-// class HotTable
+// class VizabiWrapper
 @Directive({
-  selector: 'hot-table',
+  selector: 'vizabi',
   properties: [
-    'data',
-    'colHeaders',
-    'columns',
-    'colWidths',
-    'options'
-  ],
-  events: [...], // see events below
-  lifecycle: [LifecycleEvent.onInit, LifecycleEvent.onDestroy]
+    'readerModuleObject',
+    'readerGetMethod',
+    'readerParams',
+    'readerName',
+    'model',
+    'modelHash',
+    'metadata',
+    'translations',
+    'chartType'
+  ]
 })
 ```
 
-### HotTable properties
+### VizabiWrapper properties
 
-  - `data` (`Array<any>`) - data source for this `HotTable`
-  - `col-headers` (`?Array<string>`) - array of column headers, default column headers will be shown (or not be shown, it depends on other settings) if this parameter is undefined
-  - `columns` - (`?Array<any>`) - descriptors of columns that contains information regarding type, format, source, ... of particular column
-  - `col-widths` - (`?Array<number>`) - array of column sizes, default column size will be applied if this parameter is undefined
-  - `options` - (`?any`) - other HotTables' properties that implemented in the original solution: [http://docs.handsontable.com/](http://docs.handsontable.com/)
+  * `readerModuleObject` (`?any`) - object (separate module that contains method to get reader's object); undefined by default
+  * `readerGetMethod` (`?string`) - method name (to get reader's object) in `readerModuleObject`; undefined by default
+  * `readerParams` (`?Array<any>`) - parameters for `readerGetMethod`; undefined by default
+  * `readerName` (`?string`) - reader's name; undefined by default
+  * `model` (`any`) - model for current `Vizabi` instance
+  * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default 
+  * `metadata` (`any`) - metadata for current `Vizabi` instance
+  * `translations` (`any`) - translations for current `Vizabi` instance
+  * `chartType` (`string`) - chart type for current `Vizabi` instance
 
-### HotTable events
+### Reader customization
 
-All names of the events are same as native (in original solution).
+Next parameters are for reader customization:
 
-See 'Events' in [http://docs.handsontable.com/Hooks.html](http://docs.handsontable.com/Hooks.html).
+  * `readerModuleObject`
+  * `readerGetMethod`
+  * `readerParams`
+  * `readerName`
 
-Parameter of these events is same for all of these events - the arguments from original event.
+These parameters are optional. But for custom reader using they should be defined. More information - in demo example on this page.
 
-### HotTable options
-
-All Handsontable [http://docs.handsontable.com/Options.html](options) described in documentation should be supported.
+More information regarding `Vizabi` you can see here:
+ 
+ * [github](https://github.com/Gapminder/vizabi)
+ * [demo](http://static.gapminderdev.org/vizabi/develop/preview/bubblechart.html)
+ * [docs](http://vizabi.org/)

@@ -21,8 +21,8 @@ let gettingStarted = require('./getting-started.md');
       <p>The Angular2 directive for <a href="https://github.com/Gapminder/vizabi" target="_blank">Vizabi</a></p>
       <a class="btn btn-primary" href="https://github.com/Gapminder/vizabi">View on GitHub</a>
       <div class="row">
-        <div class="col-lg-1"><iframe src="https://ghbtns.com/github-btn.html?user=valor-software&repo=ng2-vizabi&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></div>
-        <div class="col-lg-1"><iframe src="https://ghbtns.com/github-btn.html?user=valor-software&repo=ng2-vizabi&type=fork&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></div>
+        <div class="col-lg-1"><iframe src="https://ghbtns.com/github-btn.html?user=VS-work&repo=ng2-vizabi&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></div>
+        <div class="col-lg-1"><iframe src="https://ghbtns.com/github-btn.html?user=VS-work&repo=ng2-vizabi&type=fork&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe></div>
       </div>
     </div>
   </main>
@@ -35,7 +35,7 @@ let gettingStarted = require('./getting-started.md');
 
   <footer class="footer">
     <div class="container">
-      <p class="text-muted text-center"><a href="https://github.com/valor-software/ng2-vizabi">ng2-vizabi</a> is maintained by <a href="https://github.com/valor-software">valor-software</a>.</p>
+      <p class="text-muted text-center"><a href="https://github.com/VS-work/ng2-vizabi">ng2-vizabi</a> is maintained by <a href="https://github.com/valor-software">valor-software</a>.</p>
     </div>
   </footer>
   `,

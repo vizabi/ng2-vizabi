@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.15.1-0",
+  "version": "0.15.1-1",
   "description": "angular2 vizabi component",
   "scripts": {
     "deploy": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
@@ -24,15 +24,15 @@
     "twitter-bootstrap"
   ],
   "author": "Vyacheslav Chub <vyacheslav.chub@valor-software.com>",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/valor-software/ng2-vizabi.git"
+    "url": "git+ssh://git@github.com/VS-work/ng2-vizabi.git"
   },
   "bugs": {
-    "url": "https://github.com/valor-software/ng2-vizabi/issues"
+    "url": "https://github.com/VS-work/ng2-vizabi/issues"
   },
-  "homepage": "https://github.com/valor-software/ng2-vizabi#readme",
+  "homepage": "https://github.com/VS-work/ng2-vizabi#readme",
   "dependencies": {
     "@angular/common": "2.0.0-rc.4",
     "@angular/compiler": "2.0.0-rc.4",

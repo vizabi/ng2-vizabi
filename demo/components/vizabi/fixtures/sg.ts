@@ -1,3 +1,4 @@
+/* tslint:disable */
 export const query = {
   "state": {
     "time": {

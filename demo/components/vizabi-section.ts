@@ -6,7 +6,7 @@ import {TAB_DIRECTIVES} from 'ng2-bootstrap';
 import {BubbleChartDemo} from './vizabi/bubble-chart-demo';
 
 let name = 'Vizabi';
-let src = 'https://github.com/valor-software/ng2-vizabi/blob/master/components/vizabi/vizabi.ts';
+let src = 'https://github.com/VS-work/ng2-vizabi/blob/master/components/vizabi/vizabi.ts';
 // webpack html imports
 let doc = require('../../components/vizabi/readme.md');
 

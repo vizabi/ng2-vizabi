@@ -1,4 +1,4 @@
-import {OnInit, OnDestroy, Directive, EventEmitter, ElementRef} from '@angular/core';
+import {OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
 
 const d3 = require('d3');
 const Vizabi = require('vizabi');
@@ -8,24 +8,23 @@ const urlon = require('URLON');
   selector: 'vizabi',
   properties: [
     'readerModuleObject',
-    'readerModuleGetMethod',
-    'readerModuleParams',
+    'readerGetMethod',
+    'readerParams',
     'readerName',
-    'query',
-    'queryHash',
+    'model',
+    'modelHash',
     'metadata',
     'translations',
     'chartType'
-  ],
-  events: ['done']
+  ]
 })
 export class VizabiWrapper implements OnInit, OnDestroy {
   private readerModuleObject: any;
-  private readerModuleGetMethod: string;
-  private readerModuleParams: Array<any>;
+  private readerGetMethod: string;
+  private readerParams: Array<any>;
   private readerName: string;
-  private query: any;
-  private queryHash: string;
+  private model: any;
+  private modelHash: string;
   private metadata: any;
   private translations: any;
   private chartType: string;
@@ -33,49 +32,18 @@ export class VizabiWrapper implements OnInit, OnDestroy {
   private component: any;
   private view: any;
 
-  private done: EventEmitter<any> = new EventEmitter();
-
   constructor(private element: ElementRef) {
   }
 
   ngOnInit() {
-    this.view = document.createElement('div');
-    this.element.nativeElement.appendChild(this.view);
+    const initialModel = Vizabi.utils.deepClone(this.model);
 
-    const readerObject = this.readerModuleObject[this.readerModuleGetMethod].apply(this, this.readerModuleParams);
-
-    Vizabi.Reader.extend(this.readerName, readerObject);
-
-    const translations = this.translations;
-
-    Vizabi.Tool.define('preload', function (promise) {
-      Vizabi._globals.conceptprops = this.metadata;
-
-      this.model.language.strings.set(this.model.language.id, translations);
-      promise.resolve();
-    });
-
-    const initialModel = Vizabi.utils.deepClone(this.query);
-
-
-    if (this.queryHash) {
-      const str = encodeURI(decodeURIComponent(this.queryHash));
-      const urlModel = urlon.parse(str);
-
-      Vizabi.utils.deepExtend(this.query, urlModel);
-    }
-
-    this.query.bind = this.query.bind || {};
-    this.query.bind.persistentChange = onPersistentChange;
-
-    function onPersistentChange(evt, minModel) {
-      const minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
-      minModelDiff.language = {};
-
-      window.location.hash = urlon.stringify(minModelDiff);
-    }
-
-    this.component = Vizabi(this.chartType, this.view, this.query);
+    this.createView();
+    this.readerProcessing();
+    this.setMetadata();
+    this.modelHashProcessing();
+    this.persistentChangeProcessing(initialModel);
+    this.component = Vizabi(this.chartType, this.view, this.model);
   }
 
   ngOnDestroy() {
@@ -86,6 +54,54 @@ export class VizabiWrapper implements OnInit, OnDestroy {
         this.view.remove();
       }
     });
+  }
+
+  private createView() {
+    this.view = document.createElement('div');
+    this.element.nativeElement.appendChild(this.view);
+  }
+
+  private readerProcessing() {
+    if (this.readerModuleObject && this.readerGetMethod && this.readerName &&
+      this.readerParams && this.readerModuleObject[this.readerGetMethod]) {
+      const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerParams);
+
+      Vizabi.Reader.extend(this.readerName, readerObject);
+    }
+  }
+
+  private setMetadata() {
+    const translations = this.translations;
+    const metadata = this.metadata;
+
+    Vizabi.Tool.define('preload', function (promise) {
+      Vizabi._globals.conceptprops = metadata;
+
+      this.model.language.strings.set(this.model.language.id, translations);
+      promise.resolve();
+    });
+  }
+
+  private modelHashProcessing() {
+    if (this.modelHash) {
+      const str = encodeURI(decodeURIComponent(this.modelHash));
+      const urlModel = urlon.parse(str);
+
+      Vizabi.utils.deepExtend(this.model, urlModel);
+    }
+  }
+
+  private persistentChangeProcessing(initialModel) {
+    this.model.bind = this.model.bind || {};
+    this.model.bind.persistentChange = onPersistentChange;
+
+    function onPersistentChange(evt, minModel) {
+      const minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
+
+      // hack -> minimum query string
+      minModelDiff.language = {};
+      window.location.hash = urlon.stringify(minModelDiff);
+    }
   }
 }
 
