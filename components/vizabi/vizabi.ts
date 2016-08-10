@@ -4,6 +4,8 @@ const d3 = require('d3');
 const Vizabi = require('vizabi');
 const urlon = require('URLON');
 
+Vizabi.d3 = d3;
+
 @Directive({
   selector: 'vizabi',
   properties: [
