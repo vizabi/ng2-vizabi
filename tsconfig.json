@@ -18,6 +18,7 @@
     "node_modules"
   ],
   "files": [
-    "./components/index.ts"
+    "./components/index.ts",
+    "./ng2-vizabi.ts"
   ]
 }

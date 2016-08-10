@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.15.1-2",
+  "version": "0.15.1-3",
   "description": "angular2 vizabi component",
   "scripts": {
     "deploy": "NODE_ENV=production webpack -p --progress --color --optimize-minimize --optimize-dedupe --optimize-occurence-order",
@@ -10,7 +10,8 @@
     "start": "npm run server",
     "test": "gulp lint"
   },
-  "main": "dist/index.js",
+  "main": "dist/ng2-vizabi.js",
+  "typings": "dist/ng2-vizabi.d.ts",
   "files": [
     "dist",
     "components",
