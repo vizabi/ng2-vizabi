@@ -55,7 +55,7 @@ const config = {
       '@angular/common',
       '@angular/core',
     ],
-    'angular2-vizabi': ['ng2-vizabi', 'vizabi', 'd3'],
+    'angular2-vizabi': 'ng2-vizabi',
     'angular2-vizabi-demo': 'demo'
   },
 
