@@ -5,7 +5,7 @@ import {
 } from '@angular/common';
 
 import {Component} from '@angular/core';
-import {vizabiWrapper} from '../../../components/index';
+import {VIZABI_DIRECTIVES} from '../../../components/vizabi';
 import {query, metadata, translations} from './fixtures/sg';
 
 const ddfCsvReader = require('vizabi-ddfcsv-reader');
@@ -16,7 +16,7 @@ let template = require('./bubble-chart-demo.html');
 @Component({
   selector: 'bubble-chart-demo',
   template: template,
-  directives: [vizabiWrapper, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
+  directives: [VIZABI_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 export class BubbleChartDemo {
   private readerModuleObject: any;

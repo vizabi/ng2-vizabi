@@ -77,7 +77,7 @@ tabDesc.forEach(desc => {
 export class VizabiSection {
   private currentHeading: string = 'Bubble Chart';
 
-  private select(e) {
+  private select(e: any) {
     if (e.heading) {
       this.currentHeading = e.heading;
     }

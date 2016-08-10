@@ -1,27 +1,20 @@
 'use strict';
 
-var gulp = require('gulp');
-var esLint = require('gulp-eslint');
-var tslint = require('gulp-tslint');
+const gulp = require('gulp');
+const tslint = require('gulp-tslint');
+const gitignore = require('gitignore-to-glob')();
 
-var paths = gulp.paths;
+gitignore.push('**/*.ts');
 
-gulp.task('eslint', function() {
-  return gulp.src(paths.jssrc)
-    .pipe(esLint({useEslintrc: true}))
-    .pipe(esLint.format())
-    .pipe(esLint.failOnError());
-});
-
-gulp.task('tslint', function() {
-  return gulp.src(paths.tssrc)
-    .pipe(tslint({
-      formatter: 'verbose'
-    }))
-    .pipe(tslint.report({
+gulp.task('tslint', () =>
+  gulp
+    .src(gitignore)
+    .pipe(tslint())
+    .pipe(tslint.report('prose', {
       emitError: true,
-      reportLimit: 0
-    }));
-});
+      summarizeFailureOutput: true,
+      reportLimit: 50
+    }))
+);
 
-gulp.task('lint', ['tslint', 'eslint']);
+gulp.task('lint', ['tslint']);

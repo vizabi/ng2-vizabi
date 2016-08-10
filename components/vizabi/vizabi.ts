@@ -19,7 +19,7 @@ const urlon = require('URLON');
     'chartType'
   ]
 })
-export class VizabiWrapper implements OnInit, OnDestroy {
+export class VizabiDirective implements OnInit, OnDestroy {
   private readerModuleObject: any;
   private readerGetMethod: string;
   private readerParams: Array<any>;
@@ -78,7 +78,7 @@ export class VizabiWrapper implements OnInit, OnDestroy {
       const translations = this.translations;
       const metadata = this.metadata;
 
-      Vizabi.Tool.define('preload', function (promise) {
+      Vizabi.Tool.define('preload', function (promise: any) {
         if (metadata) {
           Vizabi._globals.conceptprops = metadata;
         }
@@ -101,11 +101,11 @@ export class VizabiWrapper implements OnInit, OnDestroy {
     }
   }
 
-  private persistentChangeProcessing(initialModel) {
+  private persistentChangeProcessing(initialModel: any) {
     this.model.bind = this.model.bind || {};
     this.model.bind.persistentChange = onPersistentChange;
 
-    function onPersistentChange(evt, minModel) {
+    function onPersistentChange(evt: any, minModel: any) {
       const minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
 
       // hack -> minimum query string
@@ -120,5 +120,3 @@ export class VizabiWrapper implements OnInit, OnDestroy {
     }
   }
 }
-
-export const vizabiWrapper: Array<any> = [VizabiWrapper];

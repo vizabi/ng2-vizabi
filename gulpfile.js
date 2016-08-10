@@ -1,32 +1,9 @@
 'use strict';
 
-var gulp = require('gulp');
-
-gulp.paths = {
-  tssrc: [
-    '**/*.ts',
-    '!node_modules/**/*',
-    '!dist/**/*',
-    '!typings/**/*',
-    '!typings-persist/**/*',
-    '!**/*.{ts,coffee}.js',
-    '!demo/lib/**/*'],
-  jssrc: [
-    '*.js',
-    '!angular2-vizabi.js',
-    'gulp-tasks/*.js',
-    '!node_modules',
-    '!**/*.{ts,coffee}.js']
-};
+const gulp = require('gulp');
 
 require('require-dir')('./gulp-tasks');
 
-var clean = require('gulp-clean');
-gulp.task('clean', function () {
-  return gulp.src('dist', {read: false})
-    .pipe(clean());
-});
-
-gulp.task('default', function () {
+gulp.task('default', () => {
   gulp.start('lint');
 });
