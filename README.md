@@ -12,10 +12,10 @@ Native Angular2 directive for [Vizabi](https://github.com/Gapminder/vizabi) comp
 
   `npm i ng2-vizabi --save`
 
-  Alternatively, you can [download it in a ZIP file](https://github.com/VS-work/ng2-vizabi/archive/master.zip).
+  Alternatively, you can [download it in a ZIP file](https://github.com/vizabi/ng2-vizabi/archive/master.zip).
 
 2. More information regarding using of ***ng2-vizabi*** is located in
-  [demo](http://VS-work.github.io/ng2-vizabi/) and [demo sources](https://github.com/VS-work/ng2-vizabi/tree/master/demo).
+  [demo](http://vizabi.github.io/ng2-vizabi/) and [demo sources](https://github.com/vizabi/ng2-vizabi/tree/master/demo).
 
 ## API
 
@@ -35,11 +35,11 @@ Native Angular2 directive for [Vizabi](https://github.com/Gapminder/vizabi) comp
 
 Please follow this guidelines when reporting bugs and feature requests:
 
-1. Use [GitHub Issues](https://github.com/VS-work/ng2-vizabi/issues) board to report bugs and feature requests (not our email address)
+1. Use [GitHub Issues](https://github.com/vizabi/ng2-vizabi/issues) board to report bugs and feature requests (not our email address)
 2. Please **always** write steps to reproduce the error. That way we can focus on fixing the bug, not scratching our heads trying to reproduce it.
 
 Thanks for understanding!
 
 ### License
 
-The MIT License (see the [LICENSE](https://github.com/VS-work/ng2-vizabi/blob/master/LICENSE) file for the full text)
+The MIT License (see the [LICENSE](https://github.com/vizabi/ng2-vizabi/blob/master/LICENSE) file for the full text)

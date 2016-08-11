@@ -37,12 +37,12 @@
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/VS-work/ng2-vizabi.git"
+    "url": "git+ssh://git@github.com/vizabi/ng2-vizabi.git"
   },
   "bugs": {
-    "url": "https://github.com/VS-work/ng2-vizabi/issues"
+    "url": "https://github.com/vizabi/ng2-vizabi/issues"
   },
-  "homepage": "https://github.com/VS-work/ng2-vizabi#readme",
+  "homepage": "https://github.com/vizabi/ng2-vizabi#readme",
   "peerDependencies": {
     "@angular/common": "2.0.0-rc.4",
     "@angular/compiler": "2.0.0-rc.4",
