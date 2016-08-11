@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.15.1-8",
+  "version": "0.15.1-9",
   "description": "angular2 vizabi component",
   "scripts": {
     "flow.install:typings": "./node_modules/.bin/typings install",
@@ -112,7 +112,7 @@
     "tslint-config-valorsoft": "1.0.4",
     "typescript": "1.8.10",
     "typings": "0.8.1",
-    "vizabi-ddfcsv-reader": "0.3.6",
+    "vizabi-ddfcsv-reader": "0.3.7",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1",
     "zone.js": "0.6.12"
