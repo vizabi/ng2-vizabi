@@ -4,20 +4,20 @@ import {
   CORE_DIRECTIVES, FORM_DIRECTIVES, NgClass
 } from '@angular/common';
 
+const WSReader = require('vizabi-ws-reader').WSReader;
+const WS_SERVER = 'https://waffle-server-dev.gapminderdev.org';
+
 import {Component} from '@angular/core';
 import {VIZABI_DIRECTIVES} from '../../../components/vizabi';
-import {query, metadata, translations} from './fixtures/sg';
-
-const ddfCsvReader = require('vizabi-ddfcsv-reader');
-const FrontendFileReader = ddfCsvReader.FrontendFileReader;
 
 let template = require('./bubble-chart-demo.html');
 
 @Component({
   selector: 'bubble-chart-demo',
   template: template,
-  directives: [VIZABI_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
+  directives: [VIZABI_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
+
 export class BubbleChartDemo {
   private readerModuleObject: any;
   private readerGetMethod: string;
@@ -25,21 +25,37 @@ export class BubbleChartDemo {
   private readerName: string;
   private model: any;
   private modelHash: string;
-  private metadata: any;
-  private translations: any;
+  private extResources: any;
   private chartType: string;
 
   constructor() {
+
     const hashPos = location.href.indexOf('#');
 
-    this.readerModuleObject = ddfCsvReader;
-    this.readerGetMethod = 'getDDFCsvReaderObject';
-    this.readerParams = [new FrontendFileReader()];
-    this.readerName = 'ddf1-csv-ext';
-    this.model = query;
+    this.readerModuleObject = new WSReader();
+    this.readerGetMethod = 'getReader';
+    this.readerParams = [];
+    this.readerName = 'waffle';
+    this.model = {
+      data: {
+        reader: 'waffle',
+        splash: true,
+        path: WS_SERVER + '/api/ddf/'
+      },
+      ui: {
+        buttons: [],
+        dialogs: {popup: [], sidebar: [], moreoptions: []},
+        presentation: false
+      }
+    };
     this.modelHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
-    this.metadata = metadata;
-    this.translations = translations;
     this.chartType = 'BubbleChart';
+    this.extResources = {
+      host: WS_SERVER + '/',
+      preloadPath: WS_SERVER + 'api/vizabi/',
+      dataPath: WS_SERVER + '/api/ddf/',
+      conceptpropsPath: WS_SERVER + '/api/vizabi/metadata.json',
+      translationPath: WS_SERVER + '/api/vizabi/translation/en.json'
+    };
   }
 }
