@@ -20,7 +20,6 @@ import {vizabiWrapper} from 'ng2-vizabi';
     'model',
     'modelHash',
     'extResources',
-    'metadata',
     'translations',
     'chartType'
   ]
@@ -36,7 +35,6 @@ import {vizabiWrapper} from 'ng2-vizabi';
   * `model` (`any`) - model for current `Vizabi` instance
   * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default
   * `extResources` (`?any`) - extResources object (see `Vizabi._globals.ext_resources`)
-  * `metadata` (`any`) - metadata for current `Vizabi` instance
   * `translations` (`any`) - translations for current `Vizabi` instance
   * `chartType` (`string`) - chart type for current `Vizabi` instance
 

@@ -27,7 +27,6 @@ Native Angular2 directive for [Vizabi](https://github.com/Gapminder/vizabi) comp
   * `readerName` (`?string`) - reader's name; undefined by default
   * `model` (`any`) - model for current `Vizabi` instance
   * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default 
-  * `metadata` (`any`) - metadata for current `Vizabi` instance
   * `translations` (`any`) - translations for current `Vizabi` instance
   * `chartType` (`string`) - chart type for current `Vizabi` instance
 

@@ -3,6 +3,7 @@ import {OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
 const d3 = require('d3');
 const Vizabi = require('vizabi');
 const urlon = require('URLON');
+const Promise = require('bluebird');
 
 @Directive({
   selector: 'vizabi',
@@ -14,7 +15,6 @@ const urlon = require('URLON');
     'model',
     'modelHash',
     'extResources',
-    'metadata',
     'translations',
     'chartType'
   ]
@@ -27,7 +27,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private model: any;
   private modelHash: string;
   private extResources: any;
-  private metadata: any;
   private translations: any;
   private chartType: string;
 
@@ -61,6 +60,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private createView() {
     this.view = document.createElement('div');
+    this.view.style.height = '100%';
     this.element.nativeElement.appendChild(this.view);
   }
 
@@ -68,26 +68,25 @@ export class VizabiDirective implements OnInit, OnDestroy {
     if (this.readerModuleObject && this.readerGetMethod && this.readerName &&
       this.readerParams && this.readerModuleObject[this.readerGetMethod]) {
       const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerParams);
-
       Vizabi.Reader.extend(this.readerName, readerObject);
     }
   }
 
   private setMetadata() {
-    if (this.translations || this.metadata) {
+    if (this.translations) {
       const translations = this.translations;
-      const metadata = this.metadata;
 
-      Vizabi.Tool.define('preload', function (promise: any) {
-        if (metadata) {
-          Vizabi._globals.conceptprops = metadata;
-        }
+      Vizabi.Tool.define('preloadLanguage', function () {
+        const that = this;
 
-        if (translations) {
-          this.model.language.strings.set(this.model.language.id, translations);
-        }
+        return new Promise(function (resolve: any) {
+          if (translations) {
+            that.model.language.strings.set(that.model.language.id, translations);
+          }
 
-        promise.resolve();
+          that.model.language.strings.trigger('change');
+          resolve();
+        });
       });
     }
   }

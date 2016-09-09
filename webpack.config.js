@@ -132,6 +132,7 @@ const config = {
       filename: 'angular2.js'
     }),
     // static assets
+    new CopyWebpackPlugin([{from: 'node_modules/vizabi-ddfcsv-reader/dist/bundle.web.js', to: 'ddfcsv-reader.js'}]),
     new CopyWebpackPlugin([{from: 'demo/favicon.ico', to: 'favicon.ico'}]),
     new CopyWebpackPlugin([{from: 'demo/assets', to: 'assets'}]),
     new CopyWebpackPlugin([{from: 'demo/ddf', to: 'ddf'}]),
