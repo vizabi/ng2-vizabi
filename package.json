@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.16.0-2",
+  "version": "0.16.1-0",
   "description": "angular2 vizabi component",
   "scripts": {
     "flow.install:typings": "./node_modules/.bin/typings install",
@@ -52,7 +52,7 @@
     "URLON": "2.0.0",
     "bluebird": "3.4.6",
     "d3": "3.5.6",
-    "vizabi": "0.16.0-2"
+    "vizabi": "0.16.1-0"
   },
   "devDependencies": {
     "@angular/common": "2.0.0-rc.4",
