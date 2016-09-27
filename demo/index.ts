@@ -1,11 +1,12 @@
-/// <reference path="../tsd.d.ts" />
-import {
-  CORE_DIRECTIVES, FORM_DIRECTIVES, NgClass
-} from '@angular/common';
+import {NgModule, Component, ViewEncapsulation} from '@angular/core';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {Ng2BootstrapModule} from 'ng2-bootstrap/ng2-bootstrap';
 
-import {Component, ViewEncapsulation} from '@angular/core';
-
-import {bootstrap} from '@angular/platform-browser-dynamic';
+import {VIZABI_DIRECTIVES} from './../components/vizabi';
+import {BubbleChartDemo} from './components/vizabi/bubble-chart-demo';
+import {DemoSectionComponent} from './components/demo-section';
 
 import {VizabiSection} from './components/vizabi-section';
 // import {DemoHeader} from './components/demo-header';
@@ -39,13 +40,35 @@ let gettingStarted = require('./getting-started.md');
     </div>
   </footer>
   `,
-  encapsulation: ViewEncapsulation.None,
-  directives: [
-    NgClass,
-    VizabiSection
-  ]
+  encapsulation: ViewEncapsulation.None
 })
 export class Demo {
 }
 
-bootstrap(Demo);
+@NgModule({
+  declarations: [
+    Demo,
+    DemoSectionComponent,
+    VizabiSection,
+    BubbleChartDemo,
+    VIZABI_DIRECTIVES
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    Ng2BootstrapModule,
+    ReactiveFormsModule
+  ],
+  providers: [
+    Demo,
+    DemoSectionComponent,
+    VizabiSection,
+    BubbleChartDemo
+  ],
+  bootstrap: [Demo]
+})
+
+export class AppModule {
+}
+
+platformBrowserDynamic().bootstrapModule(AppModule);

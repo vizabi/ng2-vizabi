@@ -1,85 +1,24 @@
-/// <reference path="../../tsd.d.ts" />
+import { Component } from '@angular/core';
 
-import {CORE_DIRECTIVES} from '@angular/common';
-import {Component, ViewEncapsulation} from '@angular/core';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap';
-import {BubbleChartDemo} from './vizabi/bubble-chart-demo';
-
-let name = 'Vizabi';
-let src = 'https://github.com/vizabi/ng2-vizabi/blob/master/components/vizabi/vizabi.ts';
 // webpack html imports
 let doc = require('../../components/vizabi/readme.md');
+let titleDoc = require('../../components/vizabi/title.md');
 
-let tabDesc: Array<any> = [
-  {
-    heading: 'Bubble Chart',
-    ts: require('!!prismjs?lang=typescript!./vizabi/bubble-chart-demo.ts'),
-    html: require('!!prismjs?lang=markup!./vizabi/bubble-chart-demo.html')
-  }
-];
-
-let tabsContent: string = ``;
-tabDesc.forEach(desc => {
-  let source = '';
-  if (desc.source) {
-    source = `Source of data: <a href="${desc.source}" target="_blank">${desc.source}</a><br>`;
-  }
-
-  tabsContent += `
-          <tab heading="${desc.heading}" (select)="select($event)">
-          <div class="card card-block panel panel-default panel-body">
-
-            <${desc.heading.toLowerCase().replace(' ', '-')}-demo *ngIf="currentHeading === '${desc.heading}'"></${desc.heading.toLowerCase().replace(' ', '-')}-demo>
-
-            <br>
-
-            <div class="row" style="margin: 0px;">
-              <tabset>
-                <tab heading="Markup">
-                  <div class="card card-block panel panel-default panel-body">
-                    <pre class="language-html"><code class="language-html" ng-non-bindable>${desc.html}</code></pre>
-                  </div>
-                </tab>
-                <tab heading="TypeScript">
-                  <div class="card card-block panel panel-default panel-body">
-                    <pre class="language-typescript"><code class="language-typescript" ng-non-bindable>${desc.ts}</code></pre>
-                  </div>
-                </tab>
-              </tabset>
-              ${source}
-            </div>
-          </div>
-        </tab>
-  `;
-});
+let ts = require('!!raw?lang=typescript!./vizabi/bubble-chart-demo.ts');
+let html = require('!!raw?lang=markup!./vizabi/bubble-chart-demo.html');
 
 @Component({
   selector: 'vizabi-section',
   template: `
-  <section id="${name.toLowerCase()}">
-    <div class="row">
-      <tabset>
-
-        ${tabsContent}
-
-      </tabset>
-    </div>
-
-    <div class="row">
-      <h2>API</h2>
-      <div class="card card-block panel panel-default panel-body">${doc}</div>
-    </div>
-  </section>
-  `,
-  encapsulation: ViewEncapsulation.None,
-  directives: [BubbleChartDemo, TAB_DIRECTIVES, CORE_DIRECTIVES]
+    <demo-section [name]="name" [src]="src" [titleDoc]="titleDoc" [html]="html" [ts]="ts" [doc]="doc">
+      <bubble-chart-demo></bubble-chart-demo>
+    </demo-section>`
 })
 export class VizabiSection {
-  private currentHeading: string = 'Bubble Chart';
-
-  private select(e: any) {
-    if (e.heading) {
-      this.currentHeading = e.heading;
-    }
-  }
+  public name:string = 'Vizabi';
+  public src:string = 'https://github.com/vizabi/ng2-vizabi/blob/master/components/vizabi/vizabi.ts';
+  public html:string = html;
+  public ts:string = ts;
+  public titleDoc:string = titleDoc;
+  public doc:string = doc;
 }

@@ -1,34 +1,22 @@
-import {OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
+import {Input, OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
 
-const d3 = require('d3');
 const Vizabi = require('vizabi');
 const urlon = require('URLON');
 const Promise = require('bluebird');
 
 @Directive({
-  selector: 'vizabi',
-  properties: [
-    'readerModuleObject',
-    'readerGetMethod',
-    'readerParams',
-    'readerName',
-    'model',
-    'modelHash',
-    'extResources',
-    'translations',
-    'chartType'
-  ]
+  selector: 'vizabi'
 })
 export class VizabiDirective implements OnInit, OnDestroy {
-  private readerModuleObject: any;
-  private readerGetMethod: string;
-  private readerParams: Array<any>;
-  private readerName: string;
-  private model: any;
-  private modelHash: string;
-  private extResources: any;
-  private translations: any;
-  private chartType: string;
+  @Input() private readerModuleObject: any;
+  @Input() private readerGetMethod: string;
+  @Input() private readerParams: Array<any>;
+  @Input() private readerName: string;
+  @Input() private model: any;
+  @Input() private modelHash: string;
+  @Input() private extResources: any;
+  @Input() private translations: any;
+  @Input() private chartType: string;
 
   private component: any;
   private view: any;

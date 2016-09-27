@@ -1,11 +1,4 @@
-/// <reference path="../../../tsd.d.ts" />
-
-import {
-  CORE_DIRECTIVES, FORM_DIRECTIVES, NgClass
-} from '@angular/common';
-
 import {Component} from '@angular/core';
-import {VIZABI_DIRECTIVES} from '../../../components/vizabi';
 import {query, translations} from './fixtures/sg';
 
 declare var DDFCsvReader: any;
@@ -14,8 +7,7 @@ let template = require('./bubble-chart-demo.html');
 
 @Component({
   selector: 'bubble-chart-demo',
-  template: template,
-  directives: [VIZABI_DIRECTIVES, NgClass, CORE_DIRECTIVES, FORM_DIRECTIVES]
+  template: template
 })
 export class BubbleChartDemo {
   private readerModuleObject: any;
