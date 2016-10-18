@@ -1,4 +1,4 @@
-import {Input, OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
+import {EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
 
 const Vizabi = require('vizabi');
 const urlon = require('URLON');
@@ -8,6 +8,7 @@ const Promise = require('bluebird');
   selector: 'vizabi'
 })
 export class VizabiDirective implements OnInit, OnDestroy {
+  @Input() private order: number;
   @Input() private readerModuleObject: any;
   @Input() private readerGetMethod: string;
   @Input() private readerParams: Array<any>;
@@ -17,6 +18,9 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() private extResources: any;
   @Input() private translations: any;
   @Input() private chartType: string;
+
+  @Output() private onCreated: EventEmitter<any> = new EventEmitter();
+  @Output() private onChanged: EventEmitter<any> = new EventEmitter();
 
   private component: any;
   private view: any;
@@ -34,6 +38,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     this.modelHashProcessing();
     this.persistentChangeProcessing(initialModel);
     this.component = Vizabi(this.chartType, this.view, this.model);
+    this.onCreated.emit({component: this.component});
   }
 
   ngOnDestroy() {
@@ -92,12 +97,20 @@ export class VizabiDirective implements OnInit, OnDestroy {
     this.model.bind = this.model.bind || {};
     this.model.bind.persistentChange = onPersistentChange;
 
+    const onChanged = this.onChanged;
+    const order = this.order;
+
     function onPersistentChange(evt: any, minModel: any) {
       const minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
 
       // hack -> minimum query string
       minModelDiff.language = {};
-      window.location.hash = urlon.stringify(minModelDiff);
+
+      if (window && window.location) {
+        window.location.hash = urlon.stringify(minModelDiff);
+      }
+
+      onChanged.emit({order, model: minModel, modelDiff: minModelDiff});
     }
   }
 
