@@ -96,24 +96,9 @@ const config = {
       // Support for *.json files.
       {test: /\.json$/, loader: 'json'},
       // Support for CSS as raw text
-      {test: /\.css$/, loader: 'raw'},
       // support for .html as raw text
       {test: /\.html$/, loader: 'raw'},
-      // Support for .ts files.
-      {
-        test: /\.ts$/,
-        loader: 'ts',
-        query: {
-          compilerOptions: {
-            removeComments: true,
-            noEmitHelpers: false
-          },
-          ignoreDiagnostics: [
-            2304, 1109, 6053, 7018
-          ]
-        },
-        exclude: [/\.(spec|e2e)\.ts$/]
-      }
+      {test: /\.ts$/, loaders: ['ts-loader']},
     ],
     noParse: [
       /rtts_assert\/src\/rtts_assert/,

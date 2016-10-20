@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {Ng2BootstrapModule} from 'ng2-bootstrap/ng2-bootstrap';
 
-import {VIZABI_DIRECTIVES} from './../components/vizabi';
+import {VizabiDirective} from './../components/vizabi';
 import {BubbleChartDemo} from './components/vizabi/bubble-chart-demo';
 import {DemoSectionComponent} from './components/demo-section';
 
@@ -51,7 +51,7 @@ export class Demo {
     DemoSectionComponent,
     VizabiSection,
     BubbleChartDemo,
-    VIZABI_DIRECTIVES
+    VizabiDirective
   ],
   imports: [
     BrowserModule,

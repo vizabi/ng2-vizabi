@@ -1,2 +1,18 @@
-import { VizabiDirective } from './vizabi/vizabi';
-export const VIZABI_DIRECTIVES:Array<any> = [VizabiDirective];
+import {NgModule} from '@angular/core';
+import {VizabiDirective} from './vizabi/vizabi';
+
+export {VizabiDirective};
+
+@NgModule({
+  imports: [],
+  declarations: [
+    VizabiDirective
+  ],
+  exports: [
+    VizabiDirective
+  ],
+  providers: []
+})
+
+export class VizabiModule {
+}
