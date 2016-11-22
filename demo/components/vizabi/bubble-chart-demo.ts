@@ -18,6 +18,7 @@ export class BubbleChartDemo {
   private modelHash: string;
   private translations: any;
   private chartType: string;
+  private stopUrlRedirect: boolean;
 
   constructor() {
     const hashPos = location.href.indexOf('#');
@@ -31,5 +32,6 @@ export class BubbleChartDemo {
     this.modelHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
     this.translations = translations;
     this.chartType = 'BubbleChart';
+    this.stopUrlRedirect = true;
   }
 }
