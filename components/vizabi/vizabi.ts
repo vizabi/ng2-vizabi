@@ -1,7 +1,7 @@
 import {EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
+import {VizabiService} from './vizabi-service';
 
 const Vizabi = require('vizabi');
-const urlon = require('URLON');
 const Promise = require('bluebird');
 
 @Directive({
@@ -18,33 +18,48 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() private extResources: any;
   @Input() private translations: any;
   @Input() private chartType: string;
+  @Input() private stopUrlRedirect: boolean;
 
   @Output() private onCreated: EventEmitter<any> = new EventEmitter();
   @Output() private onChanged: EventEmitter<any> = new EventEmitter();
 
   private component: any;
   private view: any;
+  private modelState: string;
 
-  constructor(private element: ElementRef) {
+  constructor(private element: ElementRef, private vService: VizabiService) {
   }
 
   ngOnInit() {
     const initialModel = Vizabi.utils.deepClone(this.model);
 
+    // set default value
+    this.stopUrlRedirect = this.stopUrlRedirect || false;
+    this.component = {instance: null};
+    this.order = this.order || 1;
+
     this.createView();
     this.readerProcessing();
-    this.setMetadata();
+
     this.setExtResources();
     this.modelHashProcessing();
     this.persistentChangeProcessing(initialModel);
-    this.component = Vizabi(this.chartType, this.view, this.model);
-    this.onCreated.emit({component: this.component});
+    this.component.instance = Vizabi(this.chartType, this.view, this.model);
+
+    this.onCreated.emit({
+      order: this.order,
+      type: this.chartType,
+      component: this.component.instance
+    });
+
+    // update language
+    this.setMetadata();
   }
 
   ngOnDestroy() {
     Object.keys(Vizabi._instances).forEach(instanceKey => {
-      if (Vizabi._instances[instanceKey]._id === this.component._id) {
-        this.component.clear();
+      if (Vizabi._instances[instanceKey]._id === this.component.instance._id) {
+        this.component.instance.clear();
         Vizabi._instances[instanceKey] = null;
         this.view.remove();
       }
@@ -66,28 +81,14 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   private setMetadata() {
-    if (this.translations) {
-      const translations = this.translations;
-
-      Vizabi.Tool.define('preloadLanguage', function () {
-        const that = this;
-
-        return new Promise(function (resolve: any) {
-          if (translations) {
-            that.model.language.strings.set(that.model.language.id, translations);
-          }
-
-          that.model.language.strings.trigger('change');
-          resolve();
-        });
-      });
-    }
+    // set language
+    this.component.instance.model.language.strings.set(this.model.language.id, this.translations);
   }
 
   private modelHashProcessing() {
     if (this.modelHash) {
       const str = encodeURI(decodeURIComponent(this.modelHash));
-      const urlModel = urlon.parse(str);
+      const urlModel = this.vService.stringToModel(str);
 
       Vizabi.utils.deepExtend(this.model, urlModel);
     }
@@ -95,23 +96,41 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private persistentChangeProcessing(initialModel: any) {
     this.model.bind = this.model.bind || {};
-    this.model.bind.persistentChange = onPersistentChange;
 
-    const onChanged = this.onChanged;
-    const order = this.order;
+    this.model.bind.ready = this.onPersistentChange.bind(this, initialModel);
+    this.model.bind.persistentChange = this.onPersistentChange.bind(this, initialModel);
+  }
 
-    function onPersistentChange(evt: any, minModel: any) {
-      const minModelDiff = Vizabi.utils.diffObject(minModel, initialModel);
+  private onPersistentChange(initialModel: any) {
 
-      // hack -> minimum query string
-      minModelDiff.language = {};
+    const minModelDiff = this.component.instance.getPersistentMinimalModel(initialModel);
 
-      if (window && window.location) {
-        window.location.hash = urlon.stringify(minModelDiff);
-      }
+    minModelDiff['chart-type'] = initialModel['chart-type'];
+    minModelDiff['language'] = {};
 
-      onChanged.emit({order, model: minModel, modelDiff: minModelDiff});
+    const modelState = this.vService.modelToString(minModelDiff);
+    if(modelState == this.modelState) {
+      // nothing was changed
+      //console.log("onPersistentChange:", " nothing was changed");
+      return false;
     }
+
+    // update latest state
+    this.modelState = modelState;
+    //console.log("onPersistentChange:", " new state ", modelState);
+
+    // check if change url is needed
+    if (!this.stopUrlRedirect && window && window.location) {
+      window.location.hash = this.vService.modelToString(minModelDiff);
+    }
+
+    // output event about changes
+    this.onChanged.emit({
+      order: this.order,
+      type: this.chartType,
+      model: initialModel,
+      modelDiff: minModelDiff
+    });
   }
 
   private setExtResources() {

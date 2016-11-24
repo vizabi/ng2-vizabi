@@ -1,7 +1,9 @@
 import {NgModule} from '@angular/core';
 import {VizabiDirective} from './vizabi/vizabi';
+import {VizabiService} from './vizabi/vizabi-service';
 
 export {VizabiDirective};
+export {VizabiService};
 
 @NgModule({
   imports: [],
@@ -11,7 +13,9 @@ export {VizabiDirective};
   exports: [
     VizabiDirective
   ],
-  providers: []
+  providers: [
+    VizabiService
+  ]
 })
 
 export class VizabiModule {
