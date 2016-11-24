@@ -2,7 +2,8 @@ import {EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef} f
 import {VizabiService} from './vizabi-service';
 
 const Vizabi = require('vizabi');
-const Promise = require('bluebird');
+
+require('zone.js/dist/zone');
 
 @Directive({
   selector: 'vizabi'
@@ -109,7 +110,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     minModelDiff['language'] = {};
 
     const modelState = this.vService.modelToString(minModelDiff);
-    if(modelState == this.modelState) {
+    if (modelState == this.modelState) {
       // nothing was changed
       //console.log("onPersistentChange:", " nothing was changed");
       return false;
