@@ -2,7 +2,8 @@ import {EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef} f
 import {VizabiService} from './vizabi-service';
 
 const Vizabi = require('vizabi');
-const Promise = require('bluebird');
+
+require('zone.js/dist/zone');
 
 @Directive({
   selector: 'vizabi'
