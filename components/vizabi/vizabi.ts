@@ -26,12 +26,14 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private component: any;
   private view: any;
   private modelState: string;
+  private minInitialModel: any;
 
   constructor(private element: ElementRef, private vService: VizabiService) {
   }
 
   ngOnInit() {
-    const initialModel = Vizabi.utils.deepClone(this.model);
+
+    this.minInitialModel = Vizabi.utils.deepClone(this.model);
 
     // set default value
     this.stopUrlRedirect = this.stopUrlRedirect || false;
@@ -43,12 +45,14 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
     this.setExtResources();
     this.modelHashProcessing();
-    this.persistentChangeProcessing(initialModel);
+    this.persistentChangeProcessing();
+
     this.component.instance = Vizabi(this.chartType, this.view, this.model);
 
     this.onCreated.emit({
       order: this.order,
       type: this.chartType,
+      model: this.model,
       component: this.component.instance
     });
 
@@ -57,13 +61,15 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+
     Object.keys(Vizabi._instances).forEach(instanceKey => {
-      if (Vizabi._instances[instanceKey]._id === this.component.instance._id) {
-        this.component.instance.clear();
+      //if (Vizabi._instances[instanceKey]._id === this.component.instance._id) {
         Vizabi._instances[instanceKey] = null;
-        this.view.remove();
-      }
+      //}
     });
+
+    this.component.instance.clear();
+    this.view.remove();
   }
 
   private createView() {
@@ -94,21 +100,26 @@ export class VizabiDirective implements OnInit, OnDestroy {
     }
   }
 
-  private persistentChangeProcessing(initialModel: any) {
+  private persistentChangeProcessing() {
     this.model.bind = this.model.bind || {};
 
-    this.model.bind.ready = this.onPersistentChange.bind(this, initialModel);
-    this.model.bind.persistentChange = this.onPersistentChange.bind(this, initialModel);
+    this.model.bind.ready = this.onPersistentChange.bind(this);
+    this.model.bind.persistentChange = this.onPersistentChange.bind(this);
   }
 
-  private onPersistentChange(initialModel: any) {
+  private onPersistentChange() {
 
-    const minModelDiff = this.component.instance.getPersistentMinimalModel(initialModel);
+    const minModelDiff = this.component.instance.getPersistentMinimalModel(this.minInitialModel);
 
-    minModelDiff['chart-type'] = initialModel['chart-type'];
-    minModelDiff['language'] = {};
+    // fix :: clear translations
+    delete minModelDiff['language']['strings'];
+    if(Vizabi.utils.isEmpty(minModelDiff['language'])) {
+      delete minModelDiff['language'];
+    }
 
     const modelState = this.vService.modelToString(minModelDiff);
+
+    // check if something changed
     if(modelState == this.modelState) {
       // nothing was changed
       //console.log("onPersistentChange:", " nothing was changed");
@@ -128,8 +139,8 @@ export class VizabiDirective implements OnInit, OnDestroy {
     this.onChanged.emit({
       order: this.order,
       type: this.chartType,
-      model: initialModel,
-      modelDiff: minModelDiff
+      modelDiff: minModelDiff,
+      minInitialModel: this.minInitialModel
     });
   }
 

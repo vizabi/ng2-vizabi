@@ -14,7 +14,7 @@ export class VizabiService {
   }
 
   public stringToModel(str) {
-    str = str || '';
+    str = str || '_';
     if(str) {
       try {
         return urlon.parse(str);
