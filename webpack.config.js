@@ -50,7 +50,6 @@ const config = {
       // Angular 2 Deps
       'es6-shim',
       'es6-promise',
-      'zone.js',
       'reflect-metadata',
       '@angular/common',
       '@angular/core',
