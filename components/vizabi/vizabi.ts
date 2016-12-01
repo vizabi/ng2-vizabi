@@ -1,8 +1,6 @@
 import {EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
 import {VizabiService} from './vizabi-service';
 
-const Vizabi = require('vizabi');
-
 require('zone.js/dist/zone');
 
 @Directive({
@@ -28,14 +26,14 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private view: any;
   private modelState: string;
   private minInitialModel: any;
+  private Vizabi: any;
 
   constructor(private element: ElementRef, private vService: VizabiService) {
   }
 
   ngOnInit() {
-
-    this.minInitialModel = Vizabi.utils.deepClone(this.model);
-
+    this.Vizabi = require('vizabi');
+    this.minInitialModel = this.Vizabi.utils.deepClone(this.model);
     // set default value
     this.stopUrlRedirect = this.stopUrlRedirect || false;
     this.component = {instance: null};
@@ -48,7 +46,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     this.modelHashProcessing();
     this.persistentChangeProcessing();
 
-    this.component.instance = Vizabi(this.chartType, this.view, this.model);
+    this.component.instance = this.Vizabi(this.chartType, this.view, this.model);
 
     this.onCreated.emit({
       order: this.order,
@@ -63,10 +61,8 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   ngOnDestroy() {
 
-    Object.keys(Vizabi._instances).forEach(instanceKey => {
-      //if (Vizabi._instances[instanceKey]._id === this.component.instance._id) {
-        Vizabi._instances[instanceKey] = null;
-      //}
+    Object.keys(this.Vizabi._instances).forEach(instanceKey => {
+      this.Vizabi._instances[instanceKey] = null;
     });
 
     this.component.instance.clear();
@@ -83,7 +79,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     if (this.readerModuleObject && this.readerGetMethod && this.readerName &&
       this.readerParams && this.readerModuleObject[this.readerGetMethod]) {
       const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerParams);
-      Vizabi.Reader.extend(this.readerName, readerObject);
+      this.Vizabi.Reader.extend(this.readerName, readerObject);
     }
   }
 
@@ -97,7 +93,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       const str = encodeURI(decodeURIComponent(this.modelHash));
       const urlModel = this.vService.stringToModel(str);
 
-      Vizabi.utils.deepExtend(this.model, urlModel);
+      this.Vizabi.utils.deepExtend(this.model, urlModel);
     }
   }
 
@@ -114,14 +110,14 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
     // fix :: clear translations
     delete minModelDiff['language']['strings'];
-    if(Vizabi.utils.isEmpty(minModelDiff['language'])) {
+    if (this.Vizabi.utils.isEmpty(minModelDiff['language'])) {
       delete minModelDiff['language'];
     }
 
     const modelState = this.vService.modelToString(minModelDiff);
 
     // check if something changed
-    if(modelState == this.modelState) {
+    if (modelState == this.modelState) {
       // nothing was changed
       //console.log("onPersistentChange:", " nothing was changed");
       return false;
@@ -147,7 +143,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private setExtResources() {
     if (this.extResources) {
-      Vizabi._globals.ext_resources = this.extResources;
+      this.Vizabi._globals.ext_resources = this.extResources;
     }
   }
 }

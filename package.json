@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.17.4-30",
+  "version": "0.17.5-1",
   "description": "angular2 vizabi component",
   "scripts": {
     "flow.compile": "npm run flow.compile:common",
@@ -46,7 +46,7 @@
   "dependencies": {
     "URLON": "2.0.0",
     "bluebird": "3.4.6",
-    "vizabi": "0.17.4-35"
+    "vizabi": "0.17.5-1"
   },
   "devDependencies": {
     "@angular/common": "2.0.0",
@@ -105,7 +105,7 @@
     "ts-loader": "0.8.2",
     "typescript": "2.0.3",
     "typings": "1.4.0",
-    "vizabi-ddfcsv-reader": "0.5.2",
+    "vizabi-ddfcsv-reader": "0.5.4",
     "webpack": "1.13.2",
     "webpack-dev-server": "1.16.1",
     "zone.js": "0.6.25"
