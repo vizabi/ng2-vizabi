@@ -96,28 +96,17 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   private onPersistentChange() {
-
     const minModelDiff = this.component.instance.getPersistentMinimalModel(this.minInitialModel);
-
-    // fix :: clear translations
-    delete minModelDiff['language']['strings'];
-    if (this.Vizabi.utils.isEmpty(minModelDiff['language'])) {
-      delete minModelDiff['language'];
-    }
-
     const modelState = this.vService.modelToString(minModelDiff);
 
     // check if something changed
     if (modelState == this.modelState) {
       // nothing was changed
-      //console.log("onPersistentChange:", " nothing was changed");
       return false;
     }
 
     // update latest state
     this.modelState = modelState;
-    //console.log("onPersistentChange:", " new state ", modelState);
-
     // check if change url is needed
     if (!this.stopUrlRedirect && window && window.location) {
       window.location.hash = this.vService.modelToString(minModelDiff);
