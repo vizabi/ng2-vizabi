@@ -15,7 +15,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() private model: any;
   @Input() private modelHash: string;
   @Input() private extResources: any;
-  @Input() private translations: any;
   @Input() private chartType: string;
   @Input() private stopUrlRedirect: boolean;
 
@@ -54,9 +53,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
       model: this.model,
       component: this.component.instance
     });
-
-    // update language
-    this.setMetadata();
   }
 
   ngOnDestroy() {
@@ -81,11 +77,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
       const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerParams);
       this.Vizabi.Reader.extend(this.readerName, readerObject);
     }
-  }
-
-  private setMetadata() {
-    // set language
-    this.component.instance.model.language.strings.set(this.model.language.id, this.translations);
   }
 
   private modelHashProcessing() {
