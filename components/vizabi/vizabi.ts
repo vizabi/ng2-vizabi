@@ -1,8 +1,6 @@
 import {EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
 import {VizabiService} from './vizabi-service';
 
-const Vizabi = require('vizabi');
-
 require('zone.js/dist/zone');
 
 @Directive({
@@ -23,6 +21,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Output() private onCreated: EventEmitter<any> = new EventEmitter();
   @Output() private onChanged: EventEmitter<any> = new EventEmitter();
 
+  private Vizabi: any;
   private component: any;
   private view: any;
   private modelState: string;
@@ -32,10 +31,9 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.Vizabi = require('vizabi');
+    this.minInitialModel = this.Vizabi.utils.deepClone(this.model);
 
-    this.minInitialModel = Vizabi.utils.deepClone(this.model);
-
-    // set default value
     this.stopUrlRedirect = this.stopUrlRedirect || false;
     this.component = {instance: null};
     this.order = this.order || 1;
@@ -47,7 +45,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     this.modelHashProcessing();
     this.persistentChangeProcessing();
 
-    this.component.instance = Vizabi(this.chartType, this.view, this.model);
+    this.component.instance = this.Vizabi(this.chartType, this.view, this.model);
 
     this.onCreated.emit({
       order: this.order,
@@ -55,17 +53,12 @@ export class VizabiDirective implements OnInit, OnDestroy {
       model: this.model,
       component: this.component.instance
     });
-
-    // update language
-    this.setMetadata();
   }
 
   ngOnDestroy() {
 
-    Object.keys(Vizabi._instances).forEach(instanceKey => {
-      //if (Vizabi._instances[instanceKey]._id === this.component.instance._id) {
-        Vizabi._instances[instanceKey] = null;
-      //}
+    Object.keys(this.Vizabi._instances).forEach(instanceKey => {
+      this.Vizabi._instances[instanceKey] = null;
     });
 
     this.component.instance.clear();
@@ -82,13 +75,8 @@ export class VizabiDirective implements OnInit, OnDestroy {
     if (this.readerModuleObject && this.readerGetMethod && this.readerName &&
       this.readerParams && this.readerModuleObject[this.readerGetMethod]) {
       const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerParams);
-      Vizabi.Reader.extend(this.readerName, readerObject);
+      this.Vizabi.Reader.extend(this.readerName, readerObject);
     }
-  }
-
-  private setMetadata() {
-    // set language
-    // this.component.instance.model.language.strings.set(this.model.language.id, this.translations);
   }
 
   private modelHashProcessing() {
@@ -96,7 +84,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       const str = encodeURI(decodeURIComponent(this.modelHash));
       const urlModel = this.vService.stringToModel(str);
 
-      Vizabi.utils.deepExtend(this.model, urlModel);
+      this.Vizabi.utils.deepExtend(this.model, urlModel);
     }
   }
 
@@ -108,27 +96,18 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   private onPersistentChange() {
-
     const minModelDiff = this.component.instance.getPersistentMinimalModel(this.minInitialModel);
-
-    // fix :: clear translations
-    /*delete minModelDiff['language']['strings'];
-    if(Vizabi.utils.isEmpty(minModelDiff['language'])) {
-      delete minModelDiff['language'];
-    }*/
-
     const modelState = this.vService.modelToString(minModelDiff);
 
     // check if something changed
-    if(modelState == this.modelState) {
+    if (modelState == this.modelState) {
       // nothing was changed
-      //console.log("onPersistentChange:", " nothing was changed");
+
       return false;
     }
 
     // update latest state
     this.modelState = modelState;
-    //console.log("onPersistentChange:", " new state ", modelState);
 
     // check if change url is needed
     if (!this.stopUrlRedirect && window && window.location) {
@@ -146,7 +125,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private setExtResources() {
     if (this.extResources) {
-      Vizabi._globals.ext_resources = this.extResources;
+      this.Vizabi._globals.ext_resources = this.extResources;
     }
   }
 }
