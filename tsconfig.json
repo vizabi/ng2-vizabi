@@ -18,10 +18,13 @@
     "**/*.spec.ts"
   ],
   "include": [
-    "./components/vizabi",
-    "./demo/index"
+    "./ng2-vizabi.ts",
+    "./components/vizabi.ts",
+    "./demo/index.ts"
   ],
   "compileOnSave": false,
   "buildOnSave": false,
-  "atom": { "rewriteTsconfig": false }
+  "atom": {
+    "rewriteTsconfig": false
+  }
 }
