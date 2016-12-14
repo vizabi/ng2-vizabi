@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {query, translations} from './fixtures/sg';
+import {query} from './fixtures/sg';
 
 declare var DDFCsvReader: any;
 
@@ -16,7 +16,6 @@ export class BubbleChartDemo {
   private readerName: string;
   private model: any;
   private modelHash: string;
-  private translations: any;
   private chartType: string;
   private stopUrlRedirect: boolean;
 
@@ -30,7 +29,6 @@ export class BubbleChartDemo {
     this.readerName = 'ddf1-csv-ext';
     this.model = query;
     this.modelHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
-    this.translations = translations;
     this.chartType = 'BubbleChart';
     this.stopUrlRedirect = true;
   }

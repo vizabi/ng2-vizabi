@@ -1,23 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": [
+      "node",
+      "mocha",
+      "chai"
+    ]
   },
   "exclude": [
     "node_modules",
-    "typings/main.d.ts",
-    "typings/main"
+    "**/*.spec.ts"
   ],
-  "filesGlob": [
-    "./src/**/*.ts",
-    "!./node_modules/**/*.ts",
-    "src/custom_typings.d.ts",
-    "typings/browser.d.ts"
+  "include": [
+    "./components/vizabi",
+    "./demo/index"
   ],
   "compileOnSave": false,
   "buildOnSave": false,
