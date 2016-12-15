@@ -18,6 +18,7 @@ export class BubbleChartDemo {
   private modelHash: string;
   private chartType: string;
   private stopUrlRedirect: boolean;
+  private additionalItem: any;
 
   constructor() {
     const hashPos = location.href.indexOf('#');
@@ -31,5 +32,12 @@ export class BubbleChartDemo {
     this.modelHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
     this.chartType = 'BubbleChart';
     this.stopUrlRedirect = true;
+
+    setTimeout(() => {
+      this.additionalItem = {
+        reader: 'csv',
+        path: 'ddf--datapoints--income_per_person_gdppercapita_ppp_inflation_adjusted--by--geo--time.csv'
+      };
+    }, 20000);
   }
 }

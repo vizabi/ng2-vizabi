@@ -26,8 +26,31 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private view: any;
   private modelState: string;
   private minInitialModel: any;
+  private _additionalItem: any;
 
   constructor(private element: ElementRef, private vService: VizabiService) {
+  }
+
+  @Input('additionalItem')
+  get additionalItem() {
+    return this._additionalItem;
+  }
+
+  set additionalItem(_additionalItem: any) {
+    this._additionalItem = _additionalItem;
+
+    if (this._additionalItem) {
+      console.log('go');
+
+      const newModel = this.component.instance.getModel();
+      newModel.data_foo = {
+        reader: "csv",
+        path: "ddf--datapoints--income_per_person_gdppercapita_ppp_inflation_adjustedNEW--by--geo--time.csv"
+      };
+
+      this.Vizabi._instances[this.component.instance._id] = null;
+      this.component.instance = this.Vizabi(this.chartType, this.view, newModel);
+    }
   }
 
   ngOnInit() {
