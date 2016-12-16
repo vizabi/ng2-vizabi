@@ -26,30 +26,34 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private view: any;
   private modelState: string;
   private minInitialModel: any;
-  private _additionalItem: any;
+  private _additionalItems: Array<any> = [];
 
   constructor(private element: ElementRef, private vService: VizabiService) {
   }
 
-  @Input('additionalItem')
-  get additionalItem() {
-    return this._additionalItem;
+  @Input('additionalItems')
+  get additionalItems(): Array<any> {
+    return this._additionalItems;
   }
 
-  set additionalItem(_additionalItem: any) {
-    this._additionalItem = _additionalItem;
+  set additionalItems(_additionalItems: Array<any>) {
+    this._additionalItems = _additionalItems;
 
-    if (this._additionalItem) {
-      console.log('go');
-
+    if (this._additionalItems && this._additionalItems.length > 0) {
       const newModel = this.component.instance.getModel();
-      newModel.data_foo = {
-        reader: "csv",
-        path: "ddf--datapoints--migrant_stock--by--geo--time.csv"
-      };
 
-      this.Vizabi._instances[this.component.instance._id] = null;
-      this.component.instance = this.Vizabi(this.chartType, this.view, newModel);
+      for (const additionalItem of this._additionalItems) {
+        const newAdditionalItemHash = `data_${additionalItem.path}`;
+
+        if (!newModel[newAdditionalItemHash]) {
+          newModel[newAdditionalItemHash] = additionalItem;
+        }
+      }
+
+      if (this.component.instance) {
+        this.Vizabi._instances[this.component.instance._id] = null;
+        this.component.instance = this.Vizabi(this.chartType, this.view, newModel);
+      }
     }
   }
 
