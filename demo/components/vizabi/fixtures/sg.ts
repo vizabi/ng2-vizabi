@@ -51,7 +51,7 @@ export const query: any = {
         domainMin: 300,
         zoomedMax: 150000,
         zoomedMin: 300,
-        which: 'life_expectancy_years'
+        which: 'income_per_person_gdppercapita_ppp_inflation_adjusted'
       },
       size: {
         use: 'indicator',

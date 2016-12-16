@@ -45,7 +45,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       const newModel = this.component.instance.getModel();
       newModel.data_foo = {
         reader: "csv",
-        path: "ddf--datapoints--income_per_person_gdppercapita_ppp_inflation_adjustedNEW--by--geo--time.csv"
+        path: "ddf--datapoints--migrant_stock--by--geo--time.csv"
       };
 
       this.Vizabi._instances[this.component.instance._id] = null;
