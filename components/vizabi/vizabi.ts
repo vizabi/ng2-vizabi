@@ -39,7 +39,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   set additionalItems(_additionalItems: Array<any>) {
     this._additionalItems = _additionalItems;
 
-    if (this._additionalItems && this._additionalItems.length > 0) {
+    if (this.component && this.component.instance && this._additionalItems && this._additionalItems.length > 0) {
       const newModel = this.component.instance.getModel();
 
       for (const additionalItem of this._additionalItems) {
@@ -50,10 +50,8 @@ export class VizabiDirective implements OnInit, OnDestroy {
         }
       }
 
-      if (this.component.instance) {
-        this.Vizabi._instances[this.component.instance._id] = null;
-        this.component.instance = this.Vizabi(this.chartType, this.view, newModel);
-      }
+      this.Vizabi._instances[this.component.instance._id] = null;
+      this.component.instance = this.Vizabi(this.chartType, this.view, newModel);
     }
   }
 
@@ -71,6 +69,16 @@ export class VizabiDirective implements OnInit, OnDestroy {
     this.setExtResources();
     this.modelHashProcessing();
     this.persistentChangeProcessing();
+
+    if (this._additionalItems && this._additionalItems.length > 0) {
+      for (const additionalItem of this.additionalItems) {
+        const newAdditionalItemHash = `data_${additionalItem.path}`;
+
+        if (!this.model[newAdditionalItemHash]) {
+          this.model[newAdditionalItemHash] = additionalItem;
+        }
+      }
+    }
 
     this.component.instance = this.Vizabi(this.chartType, this.view, this.model);
 
