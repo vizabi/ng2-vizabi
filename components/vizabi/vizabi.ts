@@ -18,6 +18,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() private chartType: string;
   @Input() private stopUrlRedirect: boolean;
 
+  @Output() private onClick: EventEmitter<any> = new EventEmitter();
   @Output() private onCreated: EventEmitter<any> = new EventEmitter();
   @Output() private onChanged: EventEmitter<any> = new EventEmitter();
 
@@ -88,6 +89,15 @@ export class VizabiDirective implements OnInit, OnDestroy {
       model: this.model,
       component: this.component.instance
     });
+
+    // document.getElementsByClassName("vzb-placeholder")[0]
+    // deeper element
+    document.getElementsByClassName("vzb-tool")[0]
+      .addEventListener('click', ($event) => {
+        this.onClick.emit({
+          event: $event
+        });
+      });
   }
 
   ngOnDestroy() {
