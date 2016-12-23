@@ -90,14 +90,13 @@ export class VizabiDirective implements OnInit, OnDestroy {
       component: this.component.instance
     });
 
-    // document.getElementsByClassName("vzb-placeholder")[0]
-    // deeper element
-    document.getElementsByClassName("vzb-tool")[0]
-      .addEventListener('click', ($event) => {
-        this.onClick.emit({
-          event: $event
+    // cover blocks with click handler
+    ["vzb-tool-stage", "vzb-tool-dialogs", "vzb-tool-buttonlist"].forEach(item => {
+      document.getElementsByClassName(item)[0]
+        .addEventListener('click', ($event) => {
+          this.onClick.emit($event);
         });
-      });
+    });
   }
 
   ngOnDestroy() {
