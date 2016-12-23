@@ -92,10 +92,12 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
     // cover blocks with click handler
     ["vzb-tool-stage", "vzb-tool-dialogs", "vzb-tool-buttonlist"].forEach(item => {
-      document.getElementsByClassName(item)[0]
-        .addEventListener('click', ($event) => {
+      const elementsList = [].slice.call(document.getElementsByClassName(item));
+      elementsList.forEach(element => {
+        element.addEventListener('click', ($event) => {
           this.onClick.emit($event);
         });
+      })
     });
   }
 
