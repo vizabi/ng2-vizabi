@@ -148,7 +148,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
     // check if something changed
     if (modelState == this.modelState) {
       // nothing was changed
-
       return false;
     }
 
@@ -160,12 +159,15 @@ export class VizabiDirective implements OnInit, OnDestroy {
       window.location.hash = this.vService.modelToString(minModelDiff);
     }
 
+    const modelFull = this.Vizabi.utils.deepClone(this.component.instance.getModel());
+
     // output event about changes
     this.onChanged.emit({
       order: this.order,
       type: this.chartType,
       modelDiff: minModelDiff,
-      minInitialModel: this.minInitialModel
+      minInitialModel: this.minInitialModel,
+      modelFull: modelFull
     });
   }
 
