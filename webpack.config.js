@@ -119,6 +119,8 @@ const config = {
     new CopyWebpackPlugin([{from: 'd3.min.js', to: 'd3.js'}]),
     new CopyWebpackPlugin([{from: 'node_modules/vizabi-ddfcsv-reader/dist/bundle.web.js', to: 'ddfcsv-reader.js'}]),
     new CopyWebpackPlugin([{from: 'demo/translation/en.json', to: 'translation/en.json'}]),
+    new CopyWebpackPlugin([{from: 'demo/extra-data/ddf--datapoints--migrant_stock--by--geo--time.csv', to: 'ddf--datapoints--migrant_stock--by--geo--time.csv'}]),
+    new CopyWebpackPlugin([{from: 'demo/extra-data/basic-indicators.csv', to: 'basic-indicators.csv'}]),
     new CopyWebpackPlugin([{from: 'demo/favicon.ico', to: 'favicon.ico'}]),
     new CopyWebpackPlugin([{from: 'demo/assets', to: 'assets'}]),
     new CopyWebpackPlugin([{from: 'demo/ddf', to: 'ddf'}]),

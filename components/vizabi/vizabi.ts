@@ -18,6 +18,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() private chartType: string;
   @Input() private stopUrlRedirect: boolean;
 
+  @Output() private onClick: EventEmitter<any> = new EventEmitter();
   @Output() private onCreated: EventEmitter<any> = new EventEmitter();
   @Output() private onChanged: EventEmitter<any> = new EventEmitter();
 
@@ -26,8 +27,33 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private view: any;
   private modelState: string;
   private minInitialModel: any;
+  private _additionalItems: Array<any> = [];
 
   constructor(private element: ElementRef, private vService: VizabiService) {
+  }
+
+  @Input('additionalItems')
+  get additionalItems(): Array<any> {
+    return this._additionalItems;
+  }
+
+  set additionalItems(_additionalItems: Array<any>) {
+    this._additionalItems = _additionalItems;
+
+    if (this.component && this.component.instance && this._additionalItems && this._additionalItems.length > 0) {
+      const newModel = this.component.instance.getModel();
+
+      for (const additionalItem of this._additionalItems) {
+        const newAdditionalItemHash = `data_${additionalItem.path}`;
+
+        if (!newModel[newAdditionalItemHash]) {
+          newModel[newAdditionalItemHash] = additionalItem;
+        }
+      }
+
+      this.Vizabi._instances[this.component.instance._id] = null;
+      this.component.instance = this.Vizabi(this.chartType, this.view, newModel);
+    }
   }
 
   ngOnInit() {
@@ -45,6 +71,16 @@ export class VizabiDirective implements OnInit, OnDestroy {
     this.modelHashProcessing();
     this.persistentChangeProcessing();
 
+    if (this._additionalItems && this._additionalItems.length > 0) {
+      for (const additionalItem of this.additionalItems) {
+        const newAdditionalItemHash = `data_${additionalItem.path}`;
+
+        if (!this.model[newAdditionalItemHash]) {
+          this.model[newAdditionalItemHash] = additionalItem;
+        }
+      }
+    }
+
     this.component.instance = this.Vizabi(this.chartType, this.view, this.model);
 
     this.onCreated.emit({
@@ -52,6 +88,16 @@ export class VizabiDirective implements OnInit, OnDestroy {
       type: this.chartType,
       model: this.model,
       component: this.component.instance
+    });
+
+    // cover blocks with click handler
+    ["vzb-tool-stage", "vzb-tool-dialogs", "vzb-tool-buttonlist"].forEach(item => {
+      const elementsList = [].slice.call(document.getElementsByClassName(item));
+      elementsList.forEach(element => {
+        element.addEventListener('click', ($event) => {
+          this.onClick.emit($event);
+        });
+      })
     });
   }
 

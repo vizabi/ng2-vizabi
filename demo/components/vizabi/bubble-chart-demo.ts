@@ -18,6 +18,7 @@ export class BubbleChartDemo {
   private modelHash: string;
   private chartType: string;
   private stopUrlRedirect: boolean;
+  private additionalItems: Array<any> = [];
 
   constructor() {
     const hashPos = location.href.indexOf('#');
@@ -31,5 +32,18 @@ export class BubbleChartDemo {
     this.modelHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
     this.chartType = 'BubbleChart';
     this.stopUrlRedirect = true;
+  }
+
+  loadAdditionalData() {
+    this.additionalItems = [
+      {
+        reader: 'csv',
+        path: 'ddf--datapoints--migrant_stock--by--geo--time.csv'
+      },
+      {
+        reader: 'csv',
+        path: 'basic-indicators.csv'
+      }
+    ];
   }
 }
