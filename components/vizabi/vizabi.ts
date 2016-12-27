@@ -53,6 +53,13 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
       this.Vizabi._instances[this.component.instance._id] = null;
       this.component.instance = this.Vizabi(this.chartType, this.view, newModel);
+
+      this.onChanged.emit({
+        order: this.order,
+        type: this.chartType,
+        minInitialModel: this.minInitialModel,
+        modelFull: newModel
+      });
     }
   }
 
