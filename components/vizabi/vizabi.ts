@@ -44,7 +44,9 @@ export class VizabiDirective implements OnInit, OnDestroy {
       const newModel = this.component.instance.getModel();
 
       for (const additionalItem of this._additionalItems) {
-        const newAdditionalItemHash = `data_${additionalItem.path}`;
+        const parsedPath = additionalItem.path.split(/[\\/]/);
+        const name = parsedPath[parsedPath.length - 1];
+        const newAdditionalItemHash = `data_${name}`;
 
         if (!newModel[newAdditionalItemHash]) {
           newModel[newAdditionalItemHash] = additionalItem;

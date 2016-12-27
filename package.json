@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.18.2-38",
+  "version": "0.18.2-39",
   "description": "angular2 vizabi component",
   "scripts": {
     "flow.compile": "npm run flow.compile:common",
