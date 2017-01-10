@@ -61,7 +61,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
         order: this.order,
         type: this.chartType,
         minInitialModel: this.minInitialModel,
-        modelFull: newModel
+        component: this.component.instance
       });
     }
   }
