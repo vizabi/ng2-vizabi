@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.18.2-85",
+  "version": "0.18.3-22",
   "description": "angular2 vizabi component",
   "scripts": {
     "flow.compile": "npm run flow.compile:common",
@@ -46,7 +46,7 @@
   "dependencies": {
     "URLON": "2.0.0",
     "bluebird": "3.4.6",
-    "vizabi": "0.18.2-85"
+    "vizabi": "0.18.3-22"
   },
   "devDependencies": {
     "@angular/common": "2.0.0",
