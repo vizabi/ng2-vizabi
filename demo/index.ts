@@ -2,7 +2,7 @@ import {NgModule, Component, ViewEncapsulation} from '@angular/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
-import {Ng2BootstrapModule} from 'ng2-bootstrap/ng2-bootstrap';
+import {Ng2BootstrapModule, TabsModule, ButtonsModule} from 'ng2-bootstrap';
 
 import {VizabiService} from './../components/vizabi/vizabi-service';
 import {VizabiDirective} from './../components/vizabi';
@@ -57,14 +57,12 @@ export class Demo {
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     Ng2BootstrapModule,
-    ReactiveFormsModule
+    TabsModule.forRoot(),
+    ButtonsModule.forRoot()
   ],
   providers: [
-    Demo,
-    DemoSectionComponent,
-    VizabiSection,
-    BubbleChartDemo,
     VizabiService
   ],
   bootstrap: [Demo]
