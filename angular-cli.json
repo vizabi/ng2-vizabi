@@ -1,0 +1,52 @@
+{
+  "project": {
+    "name": "ng2-vizabi"
+  },
+  "apps": [
+    {
+      "root": "demo/src",
+      "outDir": "demo/dist",
+      "assets": [
+        "assets",
+        "ddf",
+        "extra-data",
+        "translation"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "tsconfig": "tsconfig.json",
+      "prefix": "",
+      "mobile": false,
+      "styles": [
+        "../../node_modules/vizabi/build/dist/vizabi.css"
+      ],
+      "scripts": [
+        "../../node_modules/vizabi/build/dist/vizabi.js",
+        "../../node_modules/vizabi-ddfcsv-reader/dist/bundle.web.js"
+      ],
+      "environments": {
+        "source": "environments/environment.ts",
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+  "addons": [],
+  "packages": [],
+  "defaults": {
+    "styleExt": "css",
+    "prefixInterfaces": false,
+    "inline": {
+      "style": false,
+      "template": false
+    },
+    "spec": {
+      "class": false,
+      "component": true,
+      "directive": true,
+      "module": false,
+      "pipe": true,
+      "service": true
+    }
+  }
+}
