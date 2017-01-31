@@ -1,6 +1,5 @@
 {
-  "name": "ng2-vizabi-base",
-  "private": true,
+  "name": "ng2-vizabi",
   "version": "0.18.3-31",
   "description": "angular2 vizabi component",
   "scripts": {
