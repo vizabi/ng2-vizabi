@@ -1,15 +1,13 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.18.3-33",
+  "version": "0.18.3-34",
   "main": "bundles/ng2-vizabi.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
-  "dependencies": {
-    "URLON": "*",
-    "vizabi": "*"
-  },
   "peerDependencies": {
     "@angular/common": "*",
-    "@angular/core": "*"
+    "@angular/core": "*",
+    "vizabi": "*",
+    "URLON": "*"
   }
 }

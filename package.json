@@ -1,7 +1,7 @@
 {
   "name": "ng2-vizabi-base",
   "private": true,
-  "version": "0.18.3-33",
+  "version": "0.18.3-34",
   "description": "angular2 vizabi component",
   "scripts": {
     "lite-server": "lite-server -c demo/bs-config.json",
@@ -44,14 +44,15 @@
   "peerDependencies": {
     "@angular/common": "^2.4.0",
     "@angular/compiler": "^2.4.0",
-    "@angular/core": "^2.4.0"
-  },
-  "dependencies": {
+    "@angular/core": "^2.4.0",
     "URLON": "2.0.0",
     "bluebird": "3.4.7",
     "vizabi": "0.18.3-22"
   },
   "devDependencies": {
+    "URLON": "2.0.0",
+    "bluebird": "3.4.7",
+    "vizabi": "0.18.3-22",
     "@angular/common": "2.4.3",
     "@angular/compiler": "2.4.3",
     "@angular/compiler-cli": "2.4.3",
