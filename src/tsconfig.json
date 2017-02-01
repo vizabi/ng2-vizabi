@@ -31,7 +31,6 @@
     "node_modules"
   ],
   "files": [
-    "./vizabi/globals.d.ts",
     "./index.ts"
   ],
   "angularCompilerOptions": {

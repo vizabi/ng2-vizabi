@@ -1,6 +1,8 @@
 import {EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
 import {VizabiService} from './vizabi.service';
 
+declare const Vizabi: any;
+
 @Directive({
   selector: 'vizabi'
 })

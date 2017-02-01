@@ -1,7 +1,7 @@
 {
   "name": "ng2-vizabi-base",
   "private": true,
-  "version": "0.18.3-32",
+  "version": "0.18.3-33",
   "description": "angular2 vizabi component",
   "scripts": {
     "lite-server": "lite-server -c demo/bs-config.json",
