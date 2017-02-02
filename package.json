@@ -47,7 +47,7 @@
     "@angular/core": "^2.4.0",
     "URLON": "2.0.0",
     "bluebird": "3.4.7",
-    "vizabi": "^0.18.4"
+    "vizabi": "*"
   },
   "devDependencies": {
     "URLON": "2.0.0",
