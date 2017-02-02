@@ -16,7 +16,7 @@
     "flow.github-release": "conventional-github-releaser -p angular",
     "build": "cp -r ./node_modules/vizabi/build/dist/* ./demo/src && cp ./fix/webpack-build-common.js ./node_modules/angular-cli/models && ngm build -p src --clean && npm run link",
     "build.watch": "ngm build -p src --watch --skip-bundles",
-    "start": "ng serve --aot --sourcemap --sourcemap --vendor-chunk",
+    "start": "ng serve --aot",
     "pretest": "run-s lint build link",
     "test": "ng test -sr",
     "test-coverage": "ng test -sr -cc",
@@ -47,7 +47,7 @@
     "@angular/core": "^2.4.0",
     "URLON": "2.0.0",
     "bluebird": "3.4.7",
-    "vizabi": "^0.18.3"
+    "vizabi": "^0.18.4"
   },
   "devDependencies": {
     "URLON": "2.0.0",
