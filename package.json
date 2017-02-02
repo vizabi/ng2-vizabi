@@ -1,7 +1,7 @@
 {
   "name": "ng2-vizabi-base",
   "private": true,
-  "version": "0.18.4-2",
+  "version": "0.18.4-3",
   "description": "angular2 vizabi component",
   "scripts": {
     "lite-server": "lite-server -c demo/bs-config.json",
@@ -14,9 +14,9 @@
     "disable-lint": "tslint \"**/*.ts\" -c tslint.json --fix --type-check -t prose -e \"node_modules/**\" -e \"dist/**\" -e \"temp/**\" -e \"scripts/docs/**\"",
     "flow.changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
     "flow.github-release": "conventional-github-releaser -p angular",
-    "build": "cp ./fix/webpack-build-common.js ./node_modules/angular-cli/models && ngm build -p src --clean && npm run link",
+    "build": "cp -r ./node_modules/vizabi/build/dist/* ./demo/src && cp ./fix/webpack-build-common.js ./node_modules/angular-cli/models && ngm build -p src --clean && npm run link",
     "build.watch": "ngm build -p src --watch --skip-bundles",
-    "start": "ng serve --aot",
+    "start": "ng serve --aot --sourcemap --sourcemap --vendor-chunk",
     "pretest": "run-s lint build link",
     "test": "ng test -sr",
     "test-coverage": "ng test -sr -cc",
@@ -47,12 +47,12 @@
     "@angular/core": "^2.4.0",
     "URLON": "2.0.0",
     "bluebird": "3.4.7",
-    "vizabi": "0.18.4-2"
+    "vizabi": "^0.18.3"
   },
   "devDependencies": {
     "URLON": "2.0.0",
     "bluebird": "3.4.7",
-    "vizabi": "0.18.4-2",
+    "vizabi": "0.18.4-3",
     "@angular/common": "2.4.3",
     "@angular/compiler": "2.4.3",
     "@angular/compiler-cli": "2.4.3",

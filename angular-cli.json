@@ -17,11 +17,7 @@
       "tsconfig": "tsconfig.json",
       "prefix": "",
       "mobile": false,
-      "styles": [
-        "../../node_modules/vizabi/build/dist/vizabi.css"
-      ],
       "scripts": [
-        "../../node_modules/vizabi/build/dist/vizabi.js",
         "../../node_modules/vizabi-ddfcsv-reader/dist/bundle.web.js"
       ],
       "environments": {
