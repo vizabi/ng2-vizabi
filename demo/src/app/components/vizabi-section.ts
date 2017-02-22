@@ -14,9 +14,10 @@ let doc = require('html-loader!markdown-loader!../../doc.md');
 
 <section [attr.id]="name">
   <div class="row">
-    <h2>Example</h2>
+    <h2>Examples</h2>
       
     <vizabi-section [ts]="desc.bubbleChart.ts" [html]="desc.bubbleChart.html" [heading]="desc.bubbleChart.heading"><bubble-chart-demo></bubble-chart-demo></vizabi-section>
+    <vizabi-section [ts]="desc.arabicBubbleChart.ts" [html]="desc.arabicBubbleChart.html" [heading]="desc.arabicBubbleChart.heading"><arabic-bubble-chart-demo></arabic-bubble-chart-demo></vizabi-section>
   </div>
 
   <br>
@@ -35,6 +36,12 @@ export class VizabiMainSectionComponent {
       id: 'bubbleChart',
       ts: require('!!raw-loader?lang=typescript!./vizabi/bubble-chart-demo.ts'),
       html: require('!!raw-loader?lang=markup!./vizabi/bubble-chart-demo.html')
+    },
+    arabicBubbleChart: {
+      heading: 'Arabic Bubble Chart',
+      id: 'arabicBubbleChart',
+      ts: require('!!raw-loader?lang=typescript!./vizabi/arabic-bubble-chart-demo.ts'),
+      html: require('!!raw-loader?lang=markup!./vizabi/arabic-bubble-chart-demo.html')
     }
   };
 }

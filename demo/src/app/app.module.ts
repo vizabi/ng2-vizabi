@@ -5,6 +5,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {VizabiMainSectionComponent} from './components/vizabi-section';
 import {VizabiSectionComponent} from './components/vizabi-section.component';
 import {BubbleChartDemo} from './components/vizabi/bubble-chart-demo';
+import {ArabicBubbleChartDemo} from './components/vizabi/arabic-bubble-chart-demo';
 import {DemoHeaderComponent} from './components/demo-header';
 
 import {TabsModule, CollapseModule, DropdownModule, ButtonsModule} from 'ng2-bootstrap';
@@ -19,7 +20,8 @@ import {AppComponent} from './app.component';
     DemoHeaderComponent,
     VizabiMainSectionComponent,
     VizabiSectionComponent,
-    BubbleChartDemo
+    BubbleChartDemo,
+    ArabicBubbleChartDemo
   ],
   imports: [
     BrowserModule,
