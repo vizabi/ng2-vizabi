@@ -66,7 +66,7 @@ var DDFCsvReader =
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var content_manager_1 = __webpack_require__(2);
-	var concept_adapter_1 = __webpack_require__(3);
+	var concept_adapter_1 = __webpack_require__(6);
 	var entity_adapter_1 = __webpack_require__(39);
 	var entity_schema_adapter_1 = __webpack_require__(41);
 	var joins_adapter_1 = __webpack_require__(42);
@@ -74,7 +74,7 @@ var DDFCsvReader =
 	var datapoint_schema_adapter_1 = __webpack_require__(224);
 	var request_normalizer_1 = __webpack_require__(225);
 	var async_1 = __webpack_require__(45);
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var traverse = __webpack_require__(40);
 	var contentManager = new content_manager_1.ContentManager();
 	var ADAPTERS = {
@@ -133,7 +133,7 @@ var DDFCsvReader =
 	                    onDataPackageLoaded(dataPackageError);
 	                    return;
 	                }
-	                contentManager.dataPackage = dataPackageData;
+	                contentManager.setDataPackage(dataPackageData);
 	                _this.getConcepts(function (conceptsError, conceptsData) {
 	                    if (conceptsError) {
 	                        onDataPackageLoaded(conceptsError);
@@ -304,7 +304,7 @@ var DDFCsvReader =
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
@@ -312,10 +312,13 @@ var DDFCsvReader =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	var lodash_1 = __webpack_require__(3);
+	
 	var ContentManager = function () {
 	    function ContentManager() {
 	        _classCallCheck(this, ContentManager);
 	
+	        this.translationIds = [];
 	        this.conceptTypeHash = {};
 	        this.CACHE = {
 	            FILE_CACHED: {},
@@ -333,6 +336,16 @@ var DDFCsvReader =
 	            this.CACHE.FILE_CACHED = {};
 	            this.CACHE.FILE_REQUESTED = {};
 	        }
+	    }, {
+	        key: "setDataPackage",
+	        value: function setDataPackage(dataPackageData) {
+	            this.dataPackage = dataPackageData;
+	            if (lodash_1.isArray(this.dataPackage.translations)) {
+	                this.translationIds = this.dataPackage.translations.map(function (translation) {
+	                    return translation.id;
+	                });
+	            }
+	        }
 	    }]);
 	
 	    return ContentManager;
@@ -342,142 +355,6 @@ var DDFCsvReader =
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var lodash_1 = __webpack_require__(4);
-	var shared_1 = __webpack_require__(7);
-	var Mingo = __webpack_require__(8);
-	
-	var ConceptAdapter = function () {
-	    function ConceptAdapter(contentManager, reader, ddfPath) {
-	        _classCallCheck(this, ConceptAdapter);
-	
-	        this.recordsDescriptor = {};
-	        this.contentManager = contentManager;
-	        this.reader = lodash_1.cloneDeep(reader);
-	        this.translationReader = lodash_1.cloneDeep(reader);
-	        this.ddfPath = ddfPath;
-	    }
-	
-	    _createClass(ConceptAdapter, [{
-	        key: "addRequestNormalizer",
-	        value: function addRequestNormalizer(requestNormalizer) {
-	            this.requestNormalizer = requestNormalizer;
-	            return this;
-	        }
-	    }, {
-	        key: "getDataPackageFilteredBySelect",
-	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
-	            return shared_1.getResourcesFilteredBy(dataPackageContent, function (dataPackage, record) {
-	                return lodash_1.includes(request.select.key, record.schema.primaryKey);
-	            });
-	        }
-	    }, {
-	        key: "getNormalizedRequest",
-	        value: function getNormalizedRequest(request, onRequestNormalized) {
-	            this.request = request;
-	            onRequestNormalized(null, request);
-	        }
-	    }, {
-	        key: "getRecordTransformer",
-	        value: function getRecordTransformer() {
-	            var _this = this;
-	
-	            return function (record, filePath) {
-	                var isTranslationExists = function isTranslationExists(key) {
-	                    return _this.recordsDescriptor[filePath] && _this.recordsDescriptor[filePath].translationHash && _this.recordsDescriptor[filePath].translationHash[record.concept] && _this.recordsDescriptor[filePath].translationHash[record.concept][key];
-	                };
-	                if (record.color && !lodash_1.isEmpty(record.color)) {
-	                    try {
-	                        record.color = JSON.parse(record.color);
-	                    } catch (exc) {}
-	                }
-	                var recordKeys = lodash_1.keys(record);
-	                var _iteratorNormalCompletion = true;
-	                var _didIteratorError = false;
-	                var _iteratorError = undefined;
-	
-	                try {
-	                    for (var _iterator = recordKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                        var key = _step.value;
-	
-	                        if (isTranslationExists(key)) {
-	                            record[key] = _this.recordsDescriptor[filePath].translationHash[record.concept][key];
-	                        }
-	                    }
-	                } catch (err) {
-	                    _didIteratorError = true;
-	                    _iteratorError = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion && _iterator.return) {
-	                            _iterator.return();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError) {
-	                            throw _iteratorError;
-	                        }
-	                    }
-	                }
-	
-	                return record;
-	            };
-	        }
-	    }, {
-	        key: "getTranslationRecordTransformer",
-	        value: function getTranslationRecordTransformer() {
-	            var _this2 = this;
-	
-	            return function (record, filePath) {
-	                var dataFilePath = filePath.replace(new RegExp("lang/" + _this2.request.language + "/"), '');
-	                if (!_this2.recordsDescriptor[dataFilePath]) {
-	                    _this2.recordsDescriptor[dataFilePath] = { translationHash: {} };
-	                }
-	                _this2.recordsDescriptor[dataFilePath].translationHash[record.concept] = record;
-	                return record;
-	            };
-	        }
-	    }, {
-	        key: "getFileActions",
-	        value: function getFileActions(expectedFiles, request) {
-	            var _this3 = this;
-	
-	            return expectedFiles.map(function (file) {
-	                return function (onFileRead) {
-	                    _this3.translationReader.setRecordTransformer(_this3.getTranslationRecordTransformer());
-	                    _this3.translationReader.readCSV(_this3.ddfPath + "lang/" + request.language + "/" + file, function () {
-	                        _this3.reader.readCSV("" + _this3.ddfPath + file, onFileRead);
-	                    });
-	                };
-	            });
-	        }
-	    }, {
-	        key: "getFinalData",
-	        value: function getFinalData(results, request) {
-	            var data = lodash_1.flatten(results);
-	            var fields = request.select.key.concat(request.select.value);
-	            var projection = lodash_1.reduce(fields, function (currentProjection, field) {
-	                currentProjection[field] = 1;
-	                return currentProjection;
-	            }, {});
-	            var query = new Mingo.Query(request.where, projection);
-	            return query.find(data).all();
-	        }
-	    }]);
-	
-	    return ConceptAdapter;
-	}();
-	
-	exports.ConceptAdapter = ConceptAdapter;
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {'use strict';
@@ -16034,7 +15911,7 @@ var DDFCsvReader =
 	  (freeWindow || freeSelf || {})._ = _;
 	
 	  // Some AMD build optimizers like r.js check for condition patterns like the following:
-	  if ("function" == 'function' && _typeof(__webpack_require__(6)) == 'object' && __webpack_require__(6)) {
+	  if ("function" == 'function' && _typeof(__webpack_require__(5)) == 'object' && __webpack_require__(5)) {
 	    // Define as an anonymous module so, through path mapping, it can be
 	    // referenced as the "underscore" module.
 	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
@@ -16054,10 +15931,10 @@ var DDFCsvReader =
 	      root._ = _;
 	    }
 	}).call(undefined);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module), (function() { return this; }())))
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -16074,12 +15951,160 @@ var DDFCsvReader =
 	};
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var lodash_1 = __webpack_require__(3);
+	var shared_1 = __webpack_require__(7);
+	var Mingo = __webpack_require__(8);
+	
+	var ConceptAdapter = function () {
+	    function ConceptAdapter(contentManager, reader, ddfPath) {
+	        _classCallCheck(this, ConceptAdapter);
+	
+	        this.recordsDescriptor = {};
+	        this.contentManager = contentManager;
+	        this.reader = lodash_1.cloneDeep(reader);
+	        this.translationReader = lodash_1.cloneDeep(reader);
+	        this.ddfPath = ddfPath;
+	    }
+	
+	    _createClass(ConceptAdapter, [{
+	        key: "addRequestNormalizer",
+	        value: function addRequestNormalizer(requestNormalizer) {
+	            this.requestNormalizer = requestNormalizer;
+	            return this;
+	        }
+	    }, {
+	        key: "getDataPackageFilteredBySelect",
+	        value: function getDataPackageFilteredBySelect(request, dataPackageContent) {
+	            return shared_1.getResourcesFilteredBy(dataPackageContent, function (dataPackage, record) {
+	                return lodash_1.includes(request.select.key, record.schema.primaryKey);
+	            });
+	        }
+	    }, {
+	        key: "getNormalizedRequest",
+	        value: function getNormalizedRequest(request, onRequestNormalized) {
+	            this.request = request;
+	            onRequestNormalized(null, request);
+	        }
+	    }, {
+	        key: "getRecordTransformer",
+	        value: function getRecordTransformer() {
+	            var _this = this;
+	
+	            return function (record, filePath) {
+	                var isTranslationExists = function isTranslationExists(key) {
+	                    return _this.recordsDescriptor[filePath] && _this.recordsDescriptor[filePath].translationHash && _this.recordsDescriptor[filePath].translationHash[record.concept] && _this.recordsDescriptor[filePath].translationHash[record.concept][key];
+	                };
+	                if (record.color && !lodash_1.isEmpty(record.color)) {
+	                    try {
+	                        record.color = JSON.parse(record.color);
+	                    } catch (exc) {}
+	                }
+	                var recordKeys = lodash_1.keys(record);
+	                var _iteratorNormalCompletion = true;
+	                var _didIteratorError = false;
+	                var _iteratorError = undefined;
+	
+	                try {
+	                    for (var _iterator = recordKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                        var key = _step.value;
+	
+	                        if (isTranslationExists(key)) {
+	                            record[key] = _this.recordsDescriptor[filePath].translationHash[record.concept][key];
+	                        }
+	                    }
+	                } catch (err) {
+	                    _didIteratorError = true;
+	                    _iteratorError = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion && _iterator.return) {
+	                            _iterator.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError) {
+	                            throw _iteratorError;
+	                        }
+	                    }
+	                }
+	
+	                return record;
+	            };
+	        }
+	    }, {
+	        key: "getTranslationRecordTransformer",
+	        value: function getTranslationRecordTransformer() {
+	            var _this2 = this;
+	
+	            return function (record, filePath) {
+	                var dataFilePath = filePath.replace(new RegExp("lang/" + _this2.request.language + "/"), '');
+	                if (!_this2.recordsDescriptor[dataFilePath]) {
+	                    _this2.recordsDescriptor[dataFilePath] = { translationHash: {} };
+	                }
+	                _this2.recordsDescriptor[dataFilePath].translationHash[record.concept] = record;
+	                return record;
+	            };
+	        }
+	    }, {
+	        key: "getFileActions",
+	        value: function getFileActions(expectedFiles, request) {
+	            var _this3 = this;
+	
+	            var translationsFileActions = function translationsFileActions() {
+	                return expectedFiles.map(function (file) {
+	                    return function (onFileRead) {
+	                        _this3.translationReader.setRecordTransformer(_this3.getTranslationRecordTransformer());
+	                        _this3.translationReader.readCSV(_this3.ddfPath + "lang/" + request.language + "/" + file, function () {
+	                            _this3.reader.readCSV("" + _this3.ddfPath + file, onFileRead);
+	                        });
+	                    };
+	                });
+	            };
+	            var noTranslationsFileActions = function noTranslationsFileActions() {
+	                return expectedFiles.map(function (file) {
+	                    return function (onFileRead) {
+	                        _this3.reader.readCSV("" + _this3.ddfPath + file, onFileRead);
+	                    };
+	                });
+	            };
+	            var isTranslationActionsNeeded = lodash_1.includes(this.contentManager.translationIds, request.language);
+	            var fileActions = isTranslationActionsNeeded ? translationsFileActions : noTranslationsFileActions;
+	            return fileActions();
+	        }
+	    }, {
+	        key: "getFinalData",
+	        value: function getFinalData(results, request) {
+	            var data = lodash_1.flatten(results);
+	            var fields = request.select.key.concat(request.select.value);
+	            var projection = lodash_1.reduce(fields, function (currentProjection, field) {
+	                currentProjection[field] = 1;
+	                return currentProjection;
+	            }, {});
+	            var query = new Mingo.Query(request.where, projection);
+	            return query.find(data).all();
+	        }
+	    }]);
+	
+	    return ConceptAdapter;
+	}();
+	
+	exports.ConceptAdapter = ConceptAdapter;
 
 /***/ },
 /* 7 */
@@ -24892,7 +24917,7 @@ var DDFCsvReader =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var shared_1 = __webpack_require__(7);
 	var traverse = __webpack_require__(40);
 	var Mingo = __webpack_require__(8);
@@ -25126,14 +25151,26 @@ var DDFCsvReader =
 	        value: function getFileActions(expectedFiles, request) {
 	            var _this4 = this;
 	
-	            return expectedFiles.map(function (file) {
-	                return function (onFileRead) {
-	                    _this4.translationReader.setRecordTransformer(_this4.getTranslationRecordTransformer());
-	                    _this4.translationReader.readCSV(_this4.ddfPath + "lang/" + request.language + "/" + file, function () {
+	            var translationsFileActions = function translationsFileActions() {
+	                return expectedFiles.map(function (file) {
+	                    return function (onFileRead) {
+	                        _this4.translationReader.setRecordTransformer(_this4.getTranslationRecordTransformer());
+	                        _this4.translationReader.readCSV(_this4.ddfPath + "lang/" + request.language + "/" + file, function () {
+	                            _this4.reader.readCSV("" + _this4.ddfPath + file, onFileRead);
+	                        });
+	                    };
+	                });
+	            };
+	            var noTranslationsFileActions = function noTranslationsFileActions() {
+	                return expectedFiles.map(function (file) {
+	                    return function (onFileRead) {
 	                        _this4.reader.readCSV("" + _this4.ddfPath + file, onFileRead);
-	                    });
-	                };
-	            });
+	                    };
+	                });
+	            };
+	            var isTranslationActionsNeeded = lodash_1.includes(this.contentManager.translationIds, request.language);
+	            var fileActions = isTranslationActionsNeeded ? translationsFileActions : noTranslationsFileActions;
+	            return fileActions();
 	        }
 	    }, {
 	        key: "getFinalData",
@@ -25496,7 +25533,7 @@ var DDFCsvReader =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var shared_1 = __webpack_require__(7);
 	
 	var EntitySchemaAdapter = function () {
@@ -25570,7 +25607,7 @@ var DDFCsvReader =
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var shared_1 = __webpack_require__(7);
 	var traverse = __webpack_require__(40);
 	var Mingo = __webpack_require__(8);
@@ -25887,7 +25924,7 @@ var DDFCsvReader =
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var entity_utils_1 = __webpack_require__(44);
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var shared_1 = __webpack_require__(7);
 	var timeUtils = __webpack_require__(46);
 	var Mingo = __webpack_require__(8);
@@ -26217,27 +26254,42 @@ var DDFCsvReader =
 	        }
 	    }, {
 	        key: "getFileActions",
-	        value: function getFileActions(expectedFiles) {
+	        value: function getFileActions(expectedFiles, request) {
 	            var _this9 = this;
 	
-	            return expectedFiles.map(function (file) {
-	                return function (onFileRead) {
-	                    _this9.translationReader.setRecordTransformer(_this9.getTranslationRecordTransformer());
-	                    _this9.translationReader.readCSV(_this9.ddfPath + "lang/" + _this9.request.language + "/" + file, function () {
-	                        _this9.reader.readCSV("" + _this9.ddfPath + file, function (err, data) {
-	                            if (err || lodash_1.isEmpty(data)) {
-	                                onFileRead(err, [], {});
-	                                return;
-	                            }
-	                            var firstRecord = lodash_1.head(data);
-	                            var entityFields = _this9.getEntityFieldsByFirstRecord(firstRecord);
-	                            var timeField = _this9.getTimeFieldByFirstRecord(firstRecord);
-	                            var measureField = _this9.getMeasureFieldByFirstRecord(firstRecord);
-	                            onFileRead(null, { data: data, entityFields: entityFields, timeField: timeField, measureField: measureField });
+	            var readData = function readData(file, onFileRead) {
+	                _this9.reader.readCSV("" + _this9.ddfPath + file, function (err, data) {
+	                    if (err || lodash_1.isEmpty(data)) {
+	                        onFileRead(err, [], {});
+	                        return;
+	                    }
+	                    var firstRecord = lodash_1.head(data);
+	                    var entityFields = _this9.getEntityFieldsByFirstRecord(firstRecord);
+	                    var timeField = _this9.getTimeFieldByFirstRecord(firstRecord);
+	                    var measureField = _this9.getMeasureFieldByFirstRecord(firstRecord);
+	                    onFileRead(null, { data: data, entityFields: entityFields, timeField: timeField, measureField: measureField });
+	                });
+	            };
+	            var translationsFileActions = function translationsFileActions() {
+	                return expectedFiles.map(function (file) {
+	                    return function (onFileRead) {
+	                        _this9.translationReader.setRecordTransformer(_this9.getTranslationRecordTransformer());
+	                        _this9.translationReader.readCSV(_this9.ddfPath + "lang/" + _this9.request.language + "/" + file, function () {
+	                            return readData(file, onFileRead);
 	                        });
-	                    });
-	                };
-	            });
+	                    };
+	                });
+	            };
+	            var noTranslationsFileActions = function noTranslationsFileActions() {
+	                return expectedFiles.map(function (file) {
+	                    return function (onFileRead) {
+	                        return readData(file, onFileRead);
+	                    };
+	                });
+	            };
+	            var isTranslationActionsNeeded = lodash_1.includes(this.contentManager.translationIds, request.language);
+	            var fileActions = isTranslationActionsNeeded ? translationsFileActions : noTranslationsFileActions;
+	            return fileActions();
 	        }
 	    }, {
 	        key: "getEntityDescriptors",
@@ -26402,7 +26454,7 @@ var DDFCsvReader =
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var async_1 = __webpack_require__(45);
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var traverse = __webpack_require__(40);
 	var Mingo = __webpack_require__(8);
 	
@@ -27753,7 +27805,7 @@ var DDFCsvReader =
 	                root.async = async;
 	            }
 	})();
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(26).setImmediate, __webpack_require__(13), __webpack_require__(5)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(26).setImmediate, __webpack_require__(13), __webpack_require__(4)(module)))
 
 /***/ },
 /* 46 */
@@ -27768,7 +27820,7 @@ var DDFCsvReader =
 	var _Symbol = __webpack_require__(47);
 	var Object = __webpack_require__(98);
 	
-	var _ = __webpack_require__(4);
+	var _ = __webpack_require__(3);
 	var moment = __webpack_require__(121);
 	
 	var TWO_DIGITS_MIN_NUMBER = 10;
@@ -33564,7 +33616,7 @@ var DDFCsvReader =
 	
 	    return _moment;
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
 /* 122 */
@@ -43455,7 +43507,7 @@ var DDFCsvReader =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var shared_1 = __webpack_require__(7);
 	
 	var DataPointSchemaAdapter = function () {
@@ -43527,7 +43579,7 @@ var DDFCsvReader =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var traverse = __webpack_require__(40);
 	var timeUtils = __webpack_require__(46);
 	var COMPARISONS_OPERATORS = ['$gt', '$gte', '$lt', '$lte'];
@@ -43611,7 +43663,7 @@ var DDFCsvReader =
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var csvParse = __webpack_require__(227);
 	__webpack_require__(228);
 	
@@ -44601,7 +44653,7 @@ var DDFCsvReader =
 
 	"use strict";
 	
-	var lodash_1 = __webpack_require__(4);
+	var lodash_1 = __webpack_require__(3);
 	var ddf_1 = __webpack_require__(1);
 	var Promise = __webpack_require__(230);
 	function prepareDDFCsvReaderObject(defaultFileReader) {
