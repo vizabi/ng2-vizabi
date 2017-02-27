@@ -18,7 +18,6 @@
       "prefix": "",
       "mobile": false,
       "scripts": [
-        "../../node_modules/vizabi-ddfcsv-reader/dist/bundle.web.js"
       ],
       "environments": {
         "source": "environments/environment.ts",
