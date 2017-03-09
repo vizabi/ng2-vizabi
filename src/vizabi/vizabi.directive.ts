@@ -114,7 +114,11 @@ export class VizabiDirective implements OnInit, OnDestroy {
     });
 
     this.component.instance.clear();
-    this.view.remove();
+    this.removeElement(this.view);
+  }
+
+  removeElement(element: any) {
+    element && element.parentNode && element.parentNode.removeChild(element);
   }
 
   private createView() {
