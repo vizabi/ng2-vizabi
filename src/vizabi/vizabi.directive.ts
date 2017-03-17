@@ -1,5 +1,5 @@
-import {EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef} from '@angular/core';
-import {VizabiService} from './vizabi.service';
+import { EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef } from '@angular/core';
+import { VizabiService } from './vizabi.service';
 
 @Directive({
   selector: 'vizabi'
@@ -19,6 +19,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Output() private onClick: EventEmitter<any> = new EventEmitter();
   @Output() private onCreated: EventEmitter<any> = new EventEmitter();
   @Output() private onChanged: EventEmitter<any> = new EventEmitter();
+  @Output() private onError: EventEmitter<any> = new EventEmitter();
 
   private component: any;
   private view: any;
@@ -64,57 +65,64 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.minInitialModel = Vizabi.utils.deepClone(this.model);
+    try {
+      this.minInitialModel = Vizabi.utils.deepClone(this.model);
 
-    this.stopUrlRedirect = this.stopUrlRedirect || false;
-    this.component = {instance: null};
-    this.order = this.order || 1;
+      this.stopUrlRedirect = this.stopUrlRedirect || false;
+      this.component = {instance: null};
+      this.order = this.order || 1;
 
-    this.createView();
-    this.readerProcessing();
+      this.createView();
+      this.readerProcessing();
 
-    this.setExtResources();
-    this.modelHashProcessing();
-    this.persistentChangeProcessing();
+      this.setExtResources();
+      this.modelHashProcessing();
+      this.persistentChangeProcessing();
 
-    if (this._additionalItems && this._additionalItems.length > 0) {
-      for (const additionalItem of this.additionalItems) {
-        const newAdditionalItemHash = `data_${additionalItem.path}`;
+      if (this._additionalItems && this._additionalItems.length > 0) {
+        for (const additionalItem of this.additionalItems) {
+          const newAdditionalItemHash = `data_${additionalItem.path}`;
 
-        if (!this.model[newAdditionalItemHash]) {
-          this.model[newAdditionalItemHash] = additionalItem;
+          if (!this.model[newAdditionalItemHash]) {
+            this.model[newAdditionalItemHash] = additionalItem;
+          }
         }
       }
+
+      this.component.instance = Vizabi(this.chartType, this.view, this.model);
+
+      this.onCreated.emit({
+        order: this.order,
+        type: this.chartType,
+        model: this.model,
+        component: this.component.instance
+      });
+
+      // cover blocks with click handler
+      ["vzb-tool-stage", "vzb-tool-dialogs", "vzb-tool-buttonlist"].forEach(item => {
+        const elementsList = [].slice.call(document.getElementsByClassName(item));
+        elementsList.forEach((element: any) => {
+          element.addEventListener('click', ($event: any) => {
+            this.onClick.emit($event);
+          });
+        })
+      });
+    } catch (generalError) {
+      this.onError.emit(generalError);
     }
-
-    this.component.instance = Vizabi(this.chartType, this.view, this.model);
-
-    this.onCreated.emit({
-      order: this.order,
-      type: this.chartType,
-      model: this.model,
-      component: this.component.instance
-    });
-
-    // cover blocks with click handler
-    ["vzb-tool-stage", "vzb-tool-dialogs", "vzb-tool-buttonlist"].forEach(item => {
-      const elementsList = [].slice.call(document.getElementsByClassName(item));
-      elementsList.forEach((element: any) => {
-        element.addEventListener('click', ($event: any) => {
-          this.onClick.emit($event);
-        });
-      })
-    });
   }
 
   ngOnDestroy() {
+    try {
+      Object.keys(Vizabi._instances).forEach(instanceKey => {
+        Vizabi._instances[instanceKey] = null;
+      });
 
-    Object.keys(Vizabi._instances).forEach(instanceKey => {
-      Vizabi._instances[instanceKey] = null;
-    });
-
-    this.component.instance.clear();
-    this.removeElement(this.view);
+      this.component.instance.clear();
+      this.removeElement(this.view);
+    } catch (generalError) {
+      this.onError.emit(generalError);
+    }
   }
 
   removeElement(element: any) {
