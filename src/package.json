@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.19.4",
+  "version": "0.19.5",
   "main": "bundles/ng2-vizabi.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
@@ -8,6 +8,6 @@
     "@angular/common": "*",
     "@angular/core": "*",
     "vizabi": "*",
-    "URLON": "*"
+    "urlon": "*"
   }
 }

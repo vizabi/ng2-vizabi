@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-const urlon = require('URLON');
+const urlon = require('urlon');
 
 @Injectable()
 export class VizabiService {
