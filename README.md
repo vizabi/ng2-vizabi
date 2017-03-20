@@ -1,6 +1,6 @@
 # ng2-vizabi
 
-Native Angular2 directive for [Vizabi](https://github.com/Gapminder/vizabi) component.
+Native Angular2 directive for [Vizabi](https://github.com/vizabi/vizabi) component.
 
 [Vizabi](https://github.com/Gapminder/vizabi) is a framework for building visual data exploration tools freely provided by Gapminder. WARNING: Vizabi is in alpha. Don't expect too much!
 

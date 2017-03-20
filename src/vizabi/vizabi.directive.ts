@@ -69,7 +69,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
         });
       }
     } catch (additionalItemsError) {
-      this.onError.emit(additionalItemsError);
+      this.emitError(additionalItemsError);
     }
   }
 
@@ -118,7 +118,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       });
     } catch (generalError) {
       this.isInitError = true;
-      this.onError.emit(generalError);
+      this.emitError(generalError);
     }
   }
 
@@ -132,7 +132,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
         this.component.instance.clear();
         VizabiDirective.removeElement(this.view);
       } catch (generalError) {
-        this.onError.emit(generalError);
+        this.emitError(generalError);
       }
     }
   }
@@ -141,6 +141,10 @@ export class VizabiDirective implements OnInit, OnDestroy {
     if (element && element.parentNode) {
       element.parentNode.removeChild(element);
     }
+  }
+
+  private emitError(error: any): void {
+    this.onError.emit({message: error.message, stack: error.stack});
   }
 
   private createView(): void {
