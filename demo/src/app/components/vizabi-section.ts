@@ -34,14 +34,14 @@ export class VizabiMainSectionComponent {
     bubbleChart: {
       heading: 'Bubble Chart',
       id: 'bubbleChart',
-      ts: require('!!raw-loader?lang=typescript!./vizabi/bubble-chart-demo.ts'),
-      html: require('!!raw-loader?lang=markup!./vizabi/bubble-chart-demo.html')
+      ts: require('!!raw-loader?lang=typescript!./vizabi/bubble-chart-demo.component.ts'),
+      html: require('!!raw-loader?lang=markup!./vizabi/bubble-chart-demo.component.html')
     },
     arabicBubbleChart: {
       heading: 'Arabic Bubble Chart',
       id: 'arabicBubbleChart',
-      ts: require('!!raw-loader?lang=typescript!./vizabi/arabic-bubble-chart-demo.ts'),
-      html: require('!!raw-loader?lang=markup!./vizabi/arabic-bubble-chart-demo.html')
+      ts: require('!!raw-loader?lang=typescript!./vizabi/arabic-bubble-chart-demo.component.ts'),
+      html: require('!!raw-loader?lang=markup!./vizabi/arabic-bubble-chart-demo.component.html')
     }
   };
 }

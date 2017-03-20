@@ -19,7 +19,7 @@ Native Angular2 directive for [Vizabi](https://github.com/Gapminder/vizabi) comp
 
 ## API
 
-### Properties
+### Inputs (Properties)
 
   * `readerModuleObject` (`?any`) - object (separate module that contains method to get reader's object); undefined by default
   * `readerGetMethod` (`?string`) - method name (to get reader's object) in `readerModuleObject`; undefined by default
@@ -30,6 +30,35 @@ Native Angular2 directive for [Vizabi](https://github.com/Gapminder/vizabi) comp
   * `translations` (`any`) - translations for current `Vizabi` instance
   * `chartType` (`string`) - chart type for current `Vizabi` instance
 
+### Outputs (Events)
+
+  * `onCreated` - it fires during Vizabi based chart was created successfully
+  * `onChanged` - it fires during Vizabi based chart was changed (additional data was added, for example)
+  * `onClick` - it fires during click was occurred on Vizabi based chart
+  * `onError` - it fires during an error was occurred on Vizabi based chart
+
+## NPM Publishing
+
+```
+npm run build
+cd dist
+npm pun publish
+```
+
+Important note. Don't publish this project from root directory.
+
+## gh-pages
+
+If you need to publish demo examples to `gh-pages` you should follow next steps:
+
+```
+npm run build
+npm run demo.build
+cd demo/dist
+```
+
+Put content from `demo/dist` to your `gh-pages` branch.
+
 ## Troubleshooting
 
 Please follow this guidelines when reporting bugs and feature requests:
@@ -38,7 +67,3 @@ Please follow this guidelines when reporting bugs and feature requests:
 2. Please **always** write steps to reproduce the error. That way we can focus on fixing the bug, not scratching our heads trying to reproduce it.
 
 Thanks for understanding!
-
-### License
-
-The MIT License (see the [LICENSE](https://github.com/vizabi/ng2-vizabi/blob/master/LICENSE) file for the full text)

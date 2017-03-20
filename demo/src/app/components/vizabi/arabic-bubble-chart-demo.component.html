@@ -1,5 +1,9 @@
 <div style="height: 600px;">
     <vizabi class="vizabi-placeholder"
+            (onCreated)="onChartCreated($event)"
+            (onChanged)="onChartChanged($event)"
+            (onClick)="onChartClicked($event)"
+            (onError)="onChartError($event)"
             [readerModuleObject]="readerModuleObject"
             [readerGetMethod]="readerGetMethod"
             [readerParams]="readerParams"

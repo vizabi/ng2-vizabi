@@ -8,7 +8,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() private order: number;
   @Input() private readerModuleObject: any;
   @Input() private readerGetMethod: string;
-  @Input() private readerParams: Array<any>;
+  @Input() private readerParams: any[];
   @Input() private readerName: string;
   @Input() private model: any;
   @Input() private modelHash: string;
@@ -21,50 +21,59 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Output() private onChanged: EventEmitter<any> = new EventEmitter();
   @Output() private onError: EventEmitter<any> = new EventEmitter();
 
+  private element: ElementRef;
+  private vService: VizabiService;
   private component: any;
   private view: any;
   private modelState: string;
   private minInitialModel: any;
-  private _additionalItems: Array<any> = [];
+  private isInitError: boolean = false;
+  private _additionalItems: any[] = [];
 
-  constructor(private element: ElementRef, private vService: VizabiService) {
+  public constructor(element: ElementRef, vService: VizabiService) {
+    this.element = element;
+    this.vService = vService;
   }
 
   @Input('additionalItems')
-  get additionalItems(): Array<any> {
+  public get additionalItems(): any[] {
     return this._additionalItems;
   }
 
-  set additionalItems(_additionalItems: Array<any>) {
-    this._additionalItems = _additionalItems;
+  public set additionalItems(_additionalItems: any[]) {
+    try {
+      this._additionalItems = _additionalItems;
 
-    if (this.component && this.component.instance && this._additionalItems && this._additionalItems.length > 0) {
-      const newModel = this.component.instance.getModel();
+      if (this.component && this.component.instance && this._additionalItems && this._additionalItems.length > 0) {
+        const newModel = this.component.instance.getModel();
 
-      for (const additionalItem of this._additionalItems) {
-        const parsedPath = additionalItem.path.split(/[\\/]/);
-        const name = parsedPath[parsedPath.length - 1];
-        const newAdditionalItemHash = `data_${name}`;
+        for (const additionalItem of this._additionalItems) {
+          const parsedPath = additionalItem.path.split(/[\\/]/);
+          const name = parsedPath[parsedPath.length - 1];
+          const newAdditionalItemHash = `data_${name}`;
 
-        if (!newModel[newAdditionalItemHash]) {
-          newModel[newAdditionalItemHash] = additionalItem;
+          if (!newModel[newAdditionalItemHash]) {
+            newModel[newAdditionalItemHash] = additionalItem;
+          }
         }
+
+        Vizabi._instances[this.component.instance._id] = null;
+        this.component.instance.clear();
+        this.component.instance = Vizabi(this.chartType, this.view, newModel);
+
+        this.onChanged.emit({
+          order: this.order,
+          type: this.chartType,
+          minInitialModel: this.minInitialModel,
+          component: this.component.instance
+        });
       }
-
-      Vizabi._instances[this.component.instance._id] = null;
-      this.component.instance.clear();
-      this.component.instance = Vizabi(this.chartType, this.view, newModel);
-
-      this.onChanged.emit({
-        order: this.order,
-        type: this.chartType,
-        minInitialModel: this.minInitialModel,
-        component: this.component.instance
-      });
+    } catch (additionalItemsError) {
+      this.onError.emit(additionalItemsError);
     }
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     try {
       this.minInitialModel = Vizabi.utils.deepClone(this.model);
 
@@ -99,43 +108,48 @@ export class VizabiDirective implements OnInit, OnDestroy {
       });
 
       // cover blocks with click handler
-      ["vzb-tool-stage", "vzb-tool-dialogs", "vzb-tool-buttonlist"].forEach(item => {
+      ['vzb-tool-stage', 'vzb-tool-dialogs', 'vzb-tool-buttonlist'].forEach((item: any) => {
         const elementsList = [].slice.call(document.getElementsByClassName(item));
         elementsList.forEach((element: any) => {
           element.addEventListener('click', ($event: any) => {
             this.onClick.emit($event);
           });
-        })
+        });
       });
     } catch (generalError) {
+      this.isInitError = true;
       this.onError.emit(generalError);
     }
   }
 
-  ngOnDestroy() {
-    try {
-      Object.keys(Vizabi._instances).forEach(instanceKey => {
-        Vizabi._instances[instanceKey] = null;
-      });
+  public ngOnDestroy(): void {
+    if (!this.isInitError) {
+      try {
+        Object.keys(Vizabi._instances).forEach((instanceKey: any) => {
+          Vizabi._instances[instanceKey] = null;
+        });
 
-      this.component.instance.clear();
-      this.removeElement(this.view);
-    } catch (generalError) {
-      this.onError.emit(generalError);
+        this.component.instance.clear();
+        VizabiDirective.removeElement(this.view);
+      } catch (generalError) {
+        this.onError.emit(generalError);
+      }
     }
   }
 
-  removeElement(element: any) {
-    element && element.parentNode && element.parentNode.removeChild(element);
+  static removeElement(element: any): void {
+    if (element && element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
   }
 
-  private createView() {
+  private createView(): void {
     this.view = document.createElement('div');
     this.view.style.height = '100%';
     this.element.nativeElement.appendChild(this.view);
   }
 
-  private readerProcessing() {
+  private readerProcessing(): void {
     if (this.readerModuleObject && this.readerGetMethod && this.readerName &&
       this.readerParams && this.readerModuleObject[this.readerGetMethod]) {
       const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerParams);
@@ -143,7 +157,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     }
   }
 
-  private modelHashProcessing() {
+  private modelHashProcessing(): void {
     if (this.modelHash) {
       const str = encodeURI(decodeURIComponent(this.modelHash));
       const urlModel = this.vService.stringToModel(str);
@@ -152,7 +166,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     }
   }
 
-  private persistentChangeProcessing() {
+  private persistentChangeProcessing(): void {
     this.model.bind = this.model.bind || {};
 
     this.model.bind.ready = this.onPersistentChange.bind(this);
@@ -164,7 +178,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     const modelState = this.vService.modelToString(minModelDiff);
 
     // check if something changed
-    if (modelState == this.modelState) {
+    if (modelState === this.modelState) {
       // nothing was changed
       return false;
     }
@@ -185,7 +199,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       type: this.chartType,
       modelDiff: minModelDiff,
       minInitialModel: this.minInitialModel,
-      modelFull: modelFull
+      modelFull
     });
   }
 
