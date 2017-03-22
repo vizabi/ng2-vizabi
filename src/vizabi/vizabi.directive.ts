@@ -207,7 +207,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
     });
   }
 
-  private setExtResources() {
+  private setExtResources(): void {
     if (this.extResources) {
       Vizabi._globals.ext_resources = this.extResources;
     }
