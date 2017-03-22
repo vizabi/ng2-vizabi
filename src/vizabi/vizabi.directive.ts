@@ -28,11 +28,25 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private modelState: string;
   private minInitialModel: any;
   private isInitError: boolean = false;
+  private _active: boolean = false;
   private _additionalItems: any[] = [];
 
   public constructor(element: ElementRef, vService: VizabiService) {
     this.element = element;
     this.vService = vService;
+  }
+
+  @Input('active')
+  public get active(): boolean {
+    return this._active;
+  }
+
+  public set active(_active: boolean) {
+    this._active = _active;
+
+    if (!this._active) {
+      this.deactivate();
+    }
   }
 
   @Input('additionalItems')
@@ -207,9 +221,17 @@ export class VizabiDirective implements OnInit, OnDestroy {
     });
   }
 
-  private setExtResources() {
+  private setExtResources(): void {
     if (this.extResources) {
       Vizabi._globals.ext_resources = this.extResources;
+    }
+  }
+
+  private deactivate(): void {
+    if (this.component && this.component.instance && this.component.instance.components) {
+      this.component.instance.components
+        .find((component: any) => component.name === 'gapminder-dialogs')
+        .closeAllDialogs(true);
     }
   }
 }
