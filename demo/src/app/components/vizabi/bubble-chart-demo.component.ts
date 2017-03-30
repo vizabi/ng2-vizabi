@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import * as _ from 'lodash';
-import { query } from './sg';
+
+const query = require('../../../../../node_modules/vizabi-config-systema_globalis/BubbleChart.json');
 
 declare const DDFCsvReader: any;
 
@@ -9,15 +10,15 @@ declare const DDFCsvReader: any;
   templateUrl: './bubble-chart-demo.component.html'
 })
 export class BubbleChartDemoComponent {
-  private readerModuleObject: any;
-  private readerGetMethod: string;
-  private readerParams: any[];
-  private readerName: string;
-  private model: any;
-  private modelHash: string;
-  private chartType: string;
-  private stopUrlRedirect: boolean;
-  private additionalItems: any[] = [];
+  public readerModuleObject: any;
+  public readerGetMethod: string;
+  public readerParams: any[];
+  public readerName: string;
+  public model: any;
+  public modelHash: string;
+  public chartType: string;
+  public stopUrlRedirect: boolean;
+  public additionalItems: any[] = [];
 
   public constructor() {
     const hashPos = location.href.indexOf('#');
@@ -28,13 +29,22 @@ export class BubbleChartDemoComponent {
     this.readerParams = [new DDFCsvReader.FrontendFileReader()];
     this.readerName = 'ddf1-csv-ext';
     this.model = _.cloneDeep(query);
-    this.model.locale.id = 'en';
+    this.model.data = {
+      reader: 'ddf1-csv-ext',
+      splash: true,
+      path: './ddf',
+      ddfPath: './ddf'
+    };
+    this.model.locale = {
+      id: 'en',
+      filePath: './translation/'
+    };
     this.modelHash = hashPos >= 0 ? location.href.substring(hashPos + 1) : '';
     this.chartType = 'BubbleChart';
     this.stopUrlRedirect = true;
   }
 
-  private loadAdditionalData(): void {
+  public loadAdditionalData(): void {
     this.additionalItems = [
       {
         reader: 'csv',
@@ -47,19 +57,19 @@ export class BubbleChartDemoComponent {
     ];
   }
 
-  private onChartCreated(event: any): void {
+  public onChartCreated(event: any): void {
     console.log('bubble chart was created', event);
   }
 
-  private onChartChanged(event: any): void {
+  public onChartChanged(event: any): void {
     console.log('bubble chart was changed', event);
   }
 
-  private onChartClicked(event: any): void {
+  public onChartClicked(event: any): void {
     console.log('click on bubble chart', event);
   }
 
-  private onChartError(event: any): void {
+  public onChartError(event: any): void {
     console.log('bubble chart error', event);
   }
 }

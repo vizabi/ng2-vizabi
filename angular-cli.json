@@ -10,7 +10,20 @@
         "assets",
         "ddf",
         "extra-data",
-        "translation"
+        "translation",
+        "vizabi.js",
+        "vizabi.css",
+        "barrankchart.js",
+        "barrankchart.css",
+        "bubblechart.js",
+        "bubblechart.css",
+        "bubblemap.js",
+        "bubblemap.css",
+        "linechart.js",
+        "linechart.css",
+        "mountainchart.js",
+        "mountainchart.css",
+        "vizabi-ddfcsv-reader.js"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -19,8 +32,8 @@
       "mobile": false,
       "scripts": [
       ],
+      "environmentSource": "environments/environment.ts",
       "environments": {
-        "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       }

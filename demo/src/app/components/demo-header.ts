@@ -42,6 +42,7 @@ let components = [
   </header>`
 })
 export class DemoHeaderComponent {
-  public components:Array<any> = components;
+  public components:any[] = components;
   public prefix:string = '';
+  public isCollapsed: boolean;
 }
