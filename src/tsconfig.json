@@ -9,7 +9,6 @@
     "sourceMap": true,
     "inlineSources": true,
     "noEmitHelpers": false,
-    "noImplicitAny": true,
     "declaration": true,
     "skipLibCheck": true,
     "stripInternal": true,

@@ -5,21 +5,21 @@ import { VizabiService } from './vizabi.service';
   selector: 'vizabi'
 })
 export class VizabiDirective implements OnInit, OnDestroy {
-  @Input() private order: number;
-  @Input() private readerModuleObject: any;
-  @Input() private readerGetMethod: string;
-  @Input() private readerParams: any[];
-  @Input() private readerName: string;
-  @Input() private model: any;
-  @Input() private modelHash: string;
-  @Input() private extResources: any;
-  @Input() private chartType: string;
-  @Input() private stopUrlRedirect: boolean;
+  @Input() public order: number;
+  @Input() public readerModuleObject: any;
+  @Input() public readerGetMethod: string;
+  @Input() public readerParams: any[];
+  @Input() public readerName: string;
+  @Input() public model: any;
+  @Input() public modelHash: string;
+  @Input() public extResources: any;
+  @Input() public chartType: string;
+  @Input() public stopUrlRedirect: boolean;
 
-  @Output() private onClick: EventEmitter<any> = new EventEmitter();
-  @Output() private onCreated: EventEmitter<any> = new EventEmitter();
-  @Output() private onChanged: EventEmitter<any> = new EventEmitter();
-  @Output() private onError: EventEmitter<any> = new EventEmitter();
+  @Output() public onClick: EventEmitter<any> = new EventEmitter();
+  @Output() public onCreated: EventEmitter<any> = new EventEmitter();
+  @Output() public onChanged: EventEmitter<any> = new EventEmitter();
+  @Output() public onError: EventEmitter<any> = new EventEmitter();
 
   private element: ElementRef;
   private vService: VizabiService;

@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "0.19.12",
+  "version": "1.0.0",
   "main": "bundles/ng2-vizabi.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
@@ -8,6 +8,11 @@
     "@angular/common": "*",
     "@angular/core": "*",
     "vizabi": "*",
+    "vizabi-barrankchart": "*",
+    "vizabi-bubblechart": "*",
+    "vizabi-bubblemap": "*",
+    "vizabi-linechart": "*",
+    "vizabi-mountainchart": "*",
     "urlon": "*"
   }
 }

@@ -37,3 +37,11 @@ src/**/*.js
 src/**/*.map
 scripts/**/*.js
 scripts/**/*.map
+
+demo/src/vizabi.*
+demo/src/barrankchart.*
+demo/src/bubblechart.*
+demo/src/bubblemap.*
+demo/src/linechart.*
+demo/src/mountainchart.*
+demo/src/vizabi-ddfcsv-reader.js

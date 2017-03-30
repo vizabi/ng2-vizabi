@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-const urlon = require('urlon');
+import { Injectable } from '@angular/core';
+import * as urlon from 'urlon';
 
 @Injectable()
 export class VizabiService {
@@ -15,7 +15,7 @@ export class VizabiService {
       try {
         return urlon.parse(str);
       } catch (err) {
-        console.error("Urlon Exception:", err);
+        console.error('Urlon Exception:', err);
         return {};
       }
     }
