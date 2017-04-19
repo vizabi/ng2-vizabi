@@ -1,6 +1,8 @@
 import { EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef } from '@angular/core';
 import { VizabiService } from './vizabi.service';
 
+let isReaderReady: any = {};
+
 @Directive({
   selector: 'vizabi'
 })
@@ -169,9 +171,12 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private readerProcessing(): void {
     if (this.readerModuleObject && this.readerGetMethod && this.readerName &&
-      this.readerParams && this.readerModuleObject[this.readerGetMethod]) {
+      this.readerParams && this.readerModuleObject[this.readerGetMethod] && !isReaderReady[this.readerName]) {
       const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerParams);
+
       Vizabi.Reader.extend(this.readerName, readerObject);
+
+      isReaderReady[this.readerName] = true;
     }
   }
 
