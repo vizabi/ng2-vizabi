@@ -66,10 +66,12 @@ Put content from `demo/dist` to your `gh-pages` branch.
 Known problems:  
 > `npm run build`  
 > `cp` is not recognized as an internal or external command, operable program or batch file.  
+
 You are using windows command prompt that sucks. [Cygwin](http://www.cygwin.com/) solves it. Or use [git bash](https://git-scm.com/). Or use linux/mac.
 
-> `npm run build` fail  
-try updating your node/npm. Last time i checked the app was working i had node v6.10.2, npm v3.10.10
+> `npm run build` fails  
+
+try updating your node/npm. Last time i checked the app it was working and i had node v6.10.2, npm v3.10.10
 
 Please follow this guidelines when reporting bugs and feature requests:  
 1. Use [GitHub Issues](https://github.com/vizabi/ng2-vizabi/issues) board to report bugs and feature requests (not our email address)
