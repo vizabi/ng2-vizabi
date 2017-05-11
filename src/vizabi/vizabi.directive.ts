@@ -190,10 +190,10 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   private persistentChangeProcessing(): void {
-    this.model.bind = this.model.bind || {};
-
-    this.model.bind.ready = this.onPersistentChange.bind(this);
-    this.model.bind.persistentChange = this.onPersistentChange.bind(this);
+    if (this.model && this.model.bind) {
+      this.model.bind.ready = this.onPersistentChange.bind(this);
+      this.model.bind.persistentChange = this.onPersistentChange.bind(this);
+    }
   }
 
   private onPersistentChange() {
