@@ -36,6 +36,7 @@ Native Angular2 directive for [Vizabi](https://github.com/vizabi/vizabi) compone
 
   * `onCreated` - it fires during Vizabi based chart was created successfully
   * `onChanged` - it fires during Vizabi based chart was changed (additional data was added, for example)
+  * `onReadyOnce` - happens once on the load when both DOM and MODEL are ready
   * `onClick` - it fires during click was occurred on Vizabi based chart
   * `onError` - it fires during an error was occurred on Vizabi based chart
 

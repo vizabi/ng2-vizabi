@@ -21,6 +21,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Output() public onClick: EventEmitter<any> = new EventEmitter();
   @Output() public onCreated: EventEmitter<any> = new EventEmitter();
   @Output() public onChanged: EventEmitter<any> = new EventEmitter();
+  @Output() public onReadyOnce: EventEmitter<any> = new EventEmitter();
   @Output() public onError: EventEmitter<any> = new EventEmitter();
 
   private element: ElementRef;
@@ -103,6 +104,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       this.setExtResources();
       this.modelHashProcessing();
       this.persistentChangeProcessing();
+      this.readyOnceProcessing();
 
       if (this._additionalItems && this._additionalItems.length > 0) {
         for (const additionalItem of this.additionalItems) {
@@ -165,7 +167,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private createView(): void {
     this.view = document.createElement('div');
-    this.view.style.width = '100%';
     this.view.style.height = '100%';
     this.element.nativeElement.appendChild(this.view);
   }
@@ -188,6 +189,22 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
       Vizabi.utils.deepExtend(this.model, urlModel);
     }
+  }
+
+  private readyOnceProcessing(): void {
+    if (!this.model) {
+      return;
+    }
+
+    this.model.bind = this.model.bind || {};
+    this.model.bind.readyOnce = () => {
+      this.onReadyOnce.emit({
+        order: this.order,
+        type: this.chartType,
+        minInitialModel: this.minInitialModel,
+        component: this.component.instance
+      });
+    };
   }
 
   private persistentChangeProcessing(): void {
