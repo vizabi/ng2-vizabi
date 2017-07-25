@@ -165,6 +165,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private createView(): void {
     this.view = document.createElement('div');
+    this.view.style.width = '100%';
     this.view.style.height = '100%';
     this.element.nativeElement.appendChild(this.view);
   }
