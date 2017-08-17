@@ -91,53 +91,47 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    try {
-      this.minInitialModel = Vizabi.utils.deepClone(this.model);
-
-      this.stopUrlRedirect = this.stopUrlRedirect || false;
-      this.component = {instance: null};
-      this.order = this.order || 1;
-
-      this.createView();
-      this.readerProcessing();
-
-      this.setExtResources();
-      this.modelHashProcessing();
-      this.persistentChangeProcessing();
-      this.readyOnceProcessing();
-
-      if (this._additionalItems && this._additionalItems.length > 0) {
-        for (const additionalItem of this.additionalItems) {
-          const newAdditionalItemHash = `data_${additionalItem.path}`;
-
-          if (!this.model[newAdditionalItemHash]) {
-            this.model[newAdditionalItemHash] = additionalItem;
+    setTimeout(() => {
+      try {
+        this.minInitialModel = Vizabi.utils.deepClone(this.model);
+        this.stopUrlRedirect = this.stopUrlRedirect || false;
+        this.component = { instance: null };
+        this.order = this.order || 1;
+        this.createView();
+        this.readerProcessing();
+        this.setExtResources();
+        this.modelHashProcessing();
+        this.persistentChangeProcessing();
+        this.readyOnceProcessing();
+        if (this._additionalItems && this._additionalItems.length > 0) {
+          for (const additionalItem of this.additionalItems) {
+            const newAdditionalItemHash = `data_${additionalItem.path}`;
+            if (!this.model[newAdditionalItemHash]) {
+              this.model[newAdditionalItemHash] = additionalItem;
+            }
           }
         }
-      }
-
-      this.component.instance = Vizabi(this.chartType, this.view, this.model);
-
-      this.onCreated.emit({
-        order: this.order,
-        type: this.chartType,
-        model: this.model,
-        component: this.component.instance
-      });
-
-      // cover blocks with click handler
-      ['vzb-tool-stage', 'vzb-tool-dialogs', 'vzb-tool-buttonlist'].forEach((item: any) => {
-        const elementsList = [].slice.call(document.getElementsByClassName(item));
-        elementsList.forEach((element: any) => {
-          element.addEventListener('click', ($event: any) => {
-            this.onClick.emit($event);
+        this.component.instance = Vizabi(this.chartType, this.view, this.model);
+        this.onCreated.emit({
+          order: this.order,
+          type: this.chartType,
+          model: this.model,
+          component: this.component.instance
+        });
+        // cover blocks with click handler
+        ['vzb-tool-stage', 'vzb-tool-dialogs', 'vzb-tool-buttonlist'].forEach((item: any) => {
+          const elementsList = [].slice.call(document.getElementsByClassName(item));
+          elementsList.forEach((element: any) => {
+            element.addEventListener('click', ($event: any) => {
+              this.onClick.emit($event);
+            });
           });
         });
-      });
-    } catch (generalError) {
-      this.isInitError = true;
-      this.emitError(generalError);
-    }
+      } catch (generalError) {
+        this.isInitError = true;
+        this.emitError(generalError);
+      }
+    });
   }
 
   public ngOnDestroy(): void {
