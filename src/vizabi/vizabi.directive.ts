@@ -13,7 +13,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() public readerParams: any[];
   @Input() public readerName: string;
   @Input() public model: any;
-  @Input() public modelHash: string;
   @Input() public extResources: any;
   @Input() public chartType: string;
   @Input() public stopUrlRedirect: boolean;
@@ -32,6 +31,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private minInitialModel: any;
   private isInitError: boolean = false;
   private _active: boolean = false;
+  private _modelHash: string;
   private _additionalItems: any[] = [];
 
   public constructor(element: ElementRef, vService: VizabiService) {
@@ -50,6 +50,16 @@ export class VizabiDirective implements OnInit, OnDestroy {
     if (!this._active) {
       this.deactivate();
     }
+  }
+
+  @Input()
+  public set modelHash(_modelHash: string) {
+    this.modelHashProcessing();
+    this._modelHash = _modelHash;
+  }
+
+  public get modelHash(): string {
+    return this._modelHash;
   }
 
   @Input('additionalItems')
