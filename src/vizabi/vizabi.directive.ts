@@ -56,7 +56,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   public set modelHash(_modelHash: string) {
     this._modelHash = _modelHash;
     this.modelHashProcessing();
-    this.rebuildChart(this._modelHash);
+    this.rebuildChart(this.model, false);
   }
 
   public get modelHash(): string {
@@ -257,18 +257,20 @@ export class VizabiDirective implements OnInit, OnDestroy {
     }
   }
 
-  private rebuildChart(model: any): void {
+  private rebuildChart(model: any, isOnChangesEventExpected = true): void {
     if (this.component && this.component.instance) {
       Vizabi._instances[this.component.instance._id] = null;
       this.component.instance.clear();
       this.component.instance = Vizabi(this.chartType, this.view, model);
 
-      this.onChanged.emit({
-        order: this.order,
-        type: this.chartType,
-        minInitialModel: this.minInitialModel,
-        component: this.component.instance
-      });
+      if (isOnChangesEventExpected) {
+        this.onChanged.emit({
+          order: this.order,
+          type: this.chartType,
+          minInitialModel: this.minInitialModel,
+          component: this.component.instance
+        });
+      }
     }
   }
 }
