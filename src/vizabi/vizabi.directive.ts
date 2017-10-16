@@ -54,8 +54,8 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   @Input()
   public set modelHash(_modelHash: string) {
-    this.modelHashProcessing();
     this._modelHash = _modelHash;
+    this.modelHashProcessing();
   }
 
   public get modelHash(): string {
