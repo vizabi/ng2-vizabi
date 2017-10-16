@@ -258,15 +258,17 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   private rebuildChart(model: any): void {
-    Vizabi._instances[this.component.instance._id] = null;
-    this.component.instance.clear();
-    this.component.instance = Vizabi(this.chartType, this.view, model);
+    if (this.component && this.component.instance) {
+      Vizabi._instances[this.component.instance._id] = null;
+      this.component.instance.clear();
+      this.component.instance = Vizabi(this.chartType, this.view, model);
 
-    this.onChanged.emit({
-      order: this.order,
-      type: this.chartType,
-      minInitialModel: this.minInitialModel,
-      component: this.component.instance
-    });
+      this.onChanged.emit({
+        order: this.order,
+        type: this.chartType,
+        minInitialModel: this.minInitialModel,
+        component: this.component.instance
+      });
+    }
   }
 }
