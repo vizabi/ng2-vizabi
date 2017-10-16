@@ -13,6 +13,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() public readerParams: any[];
   @Input() public readerName: string;
   @Input() public model: any;
+  @Input() public modelHash: string;
   @Input() public extResources: any;
   @Input() public chartType: string;
   @Input() public stopUrlRedirect: boolean;
@@ -31,7 +32,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private minInitialModel: any;
   private isInitError: boolean = false;
   private _active: boolean = false;
-  private _modelHash: string;
   private _additionalItems: any[] = [];
 
   public constructor(element: ElementRef, vService: VizabiService) {
@@ -50,17 +50,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
     if (!this._active) {
       this.deactivate();
     }
-  }
-
-  @Input()
-  public set modelHash(_modelHash: string) {
-    this._modelHash = _modelHash;
-    this.modelHashProcessing();
-    this.rebuildChart(this.model, false);
-  }
-
-  public get modelHash(): string {
-    return this._modelHash;
   }
 
   @Input('additionalItems')
@@ -85,7 +74,16 @@ export class VizabiDirective implements OnInit, OnDestroy {
           }
         }
 
-        this.rebuildChart(newModel);
+        Vizabi._instances[this.component.instance._id] = null;
+        this.component.instance.clear();
+        this.component.instance = Vizabi(this.chartType, this.view, newModel);
+
+        this.onChanged.emit({
+          order: this.order,
+          type: this.chartType,
+          minInitialModel: this.minInitialModel,
+          component: this.component.instance
+        });
       }
     } catch (additionalItemsError) {
       this.emitError(additionalItemsError);
@@ -97,7 +95,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       try {
         this.minInitialModel = Vizabi.utils.deepClone(this.model);
         this.stopUrlRedirect = this.stopUrlRedirect || false;
-        this.component = {instance: null};
+        this.component = { instance: null };
         this.order = this.order || 1;
         this.createView();
         this.readerProcessing();
@@ -254,23 +252,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
       this.component.instance.components
         .find((component: any) => component.name === 'gapminder-dialogs')
         .closeAllDialogs(true);
-    }
-  }
-
-  private rebuildChart(model: any, isOnChangesEventExpected = true): void {
-    if (this.component && this.component.instance) {
-      Vizabi._instances[this.component.instance._id] = null;
-      this.component.instance.clear();
-      this.component.instance = Vizabi(this.chartType, this.view, model);
-
-      if (isOnChangesEventExpected) {
-        this.onChanged.emit({
-          order: this.order,
-          type: this.chartType,
-          minInitialModel: this.minInitialModel,
-          component: this.component.instance
-        });
-      }
     }
   }
 }
