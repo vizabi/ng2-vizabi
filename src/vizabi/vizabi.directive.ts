@@ -56,17 +56,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   public set modelHash(_modelHash: string) {
     this._modelHash = _modelHash;
     this.modelHashProcessing();
-
-    Vizabi._instances[this.component.instance._id] = null;
-    this.component.instance.clear();
-    this.component.instance = Vizabi(this.chartType, this.view, this._modelHash);
-
-    this.onChanged.emit({
-      order: this.order,
-      type: this.chartType,
-      minInitialModel: this.minInitialModel,
-      component: this.component.instance
-    });
+    this.rebuildChart(this._modelHash);
   }
 
   public get modelHash(): string {
@@ -95,16 +85,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
           }
         }
 
-        Vizabi._instances[this.component.instance._id] = null;
-        this.component.instance.clear();
-        this.component.instance = Vizabi(this.chartType, this.view, newModel);
-
-        this.onChanged.emit({
-          order: this.order,
-          type: this.chartType,
-          minInitialModel: this.minInitialModel,
-          component: this.component.instance
-        });
+        this.rebuildChart(newModel);
       }
     } catch (additionalItemsError) {
       this.emitError(additionalItemsError);
@@ -116,7 +97,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       try {
         this.minInitialModel = Vizabi.utils.deepClone(this.model);
         this.stopUrlRedirect = this.stopUrlRedirect || false;
-        this.component = { instance: null };
+        this.component = {instance: null};
         this.order = this.order || 1;
         this.createView();
         this.readerProcessing();
@@ -274,5 +255,18 @@ export class VizabiDirective implements OnInit, OnDestroy {
         .find((component: any) => component.name === 'gapminder-dialogs')
         .closeAllDialogs(true);
     }
+  }
+
+  private rebuildChart(model: any): void {
+    Vizabi._instances[this.component.instance._id] = null;
+    this.component.instance.clear();
+    this.component.instance = Vizabi(this.chartType, this.view, model);
+
+    this.onChanged.emit({
+      order: this.order,
+      type: this.chartType,
+      minInitialModel: this.minInitialModel,
+      component: this.component.instance
+    });
   }
 }
