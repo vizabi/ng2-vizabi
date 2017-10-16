@@ -56,6 +56,17 @@ export class VizabiDirective implements OnInit, OnDestroy {
   public set modelHash(_modelHash: string) {
     this._modelHash = _modelHash;
     this.modelHashProcessing();
+
+    Vizabi._instances[this.component.instance._id] = null;
+    this.component.instance.clear();
+    this.component.instance = Vizabi(this.chartType, this.view, this._modelHash);
+
+    this.onChanged.emit({
+      order: this.order,
+      type: this.chartType,
+      minInitialModel: this.minInitialModel,
+      component: this.component.instance
+    });
   }
 
   public get modelHash(): string {
