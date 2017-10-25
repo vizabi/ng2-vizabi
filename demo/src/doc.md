@@ -17,7 +17,7 @@ import {VizabiModule} from 'ng2-vizabi';
   * `stopUrlRedirect` (`boolean`) - prevent changing url by this component if `true`; `false` by default
   * `readerModuleObject` (`?any`) - object (separate module that contains method to get reader's object); undefined by default
   * `readerGetMethod` (`?string`) - method name (to get reader's object) in `readerModuleObject`; undefined by default
-  * `readerParams` (`?Array<any>`) - parameters for `readerGetMethod`; undefined by default
+  * `readerPlugins` (`?Array<any>`) - parameters for `readerGetMethod`; undefined by default
   * `readerName` (`?string`) - reader's name; undefined by default
   * `model` (`any`) - model for current `Vizabi` instance
   * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default

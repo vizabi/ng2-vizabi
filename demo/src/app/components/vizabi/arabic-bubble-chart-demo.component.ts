@@ -12,7 +12,7 @@ declare const DDFCsvReader: any;
 export class ArabicBubbleChartDemoComponent {
   public readerModuleObject: any;
   public readerGetMethod: string;
-  public readerParams: any[];
+  public readerPlugins: any[];
   public readerName: string;
   public model: any;
   public modelHash: string;
@@ -24,8 +24,8 @@ export class ArabicBubbleChartDemoComponent {
 
     this.readerModuleObject = DDFCsvReader;
     this.readerGetMethod = 'getDDFCsvReaderObject';
-    // this.readerParams = [new DDFCsvReader.FrontendFileReader(), console];
-    this.readerParams = [new DDFCsvReader.FrontendFileReader()];
+    // this.readerPlugins = [new DDFCsvReader.FrontendFileReader(), console];
+    this.readerPlugins = [new DDFCsvReader.FrontendFileReader()];
     this.readerName = 'ddf1-csv-ext';
     this.model = _.cloneDeep(query);
     this.model.data = {

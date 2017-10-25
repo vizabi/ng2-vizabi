@@ -1,6 +1,6 @@
 ### Overview
 
-Native Angular2 directive for `Vizabi` component. 
+Native Angular2 directive for `Vizabi` component.
 
 ### Usage
 ```typescript
@@ -21,7 +21,7 @@ import {VizabiModule} from 'ng2-vizabi';
   * `stopUrlRedirect` (`boolean`) - prevent changing url by this component if `true`; `false` by default
   * `readerModuleObject` (`?any`) - object (separate module that contains method to get reader's object); undefined by default
   * `readerGetMethod` (`?string`) - method name (to get reader's object) in `readerModuleObject`; undefined by default
-  * `readerParams` (`?Array<any>`) - parameters for `readerGetMethod`; undefined by default
+  * `readerPlugins` (`?Array<any>`) - parameters for `readerGetMethod`; undefined by default
   * `readerName` (`?string`) - reader's name; undefined by default
   * `model` (`any`) - model for current `Vizabi` instance
   * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default
@@ -40,13 +40,13 @@ Next parameters are for reader customization:
 
   * `readerModuleObject`
   * `readerGetMethod`
-  * `readerParams`
+  * `readerPlugins`
   * `readerName`
 
 These parameters are optional. But for custom reader using they should be defined. More information - in demo example on this page.
 
 More information regarding `Vizabi` you can see here:
- 
+
  * [github](https://github.com/Gapminder/vizabi)
  * [demo](http://static.gapminderdev.org/vizabi/develop/preview/bubblechart.html)
  * [docs](http://vizabi.org/)

@@ -16,7 +16,7 @@ Native Angular2 directive for [Vizabi](https://github.com/vizabi/vizabi) compone
 
 2. More information regarding using of ***ng2-vizabi*** is located in
   [demo](http://vizabi.github.io/ng2-vizabi/) and [demo sources](https://github.com/vizabi/ng2-vizabi/tree/master/demo).
-  
+
   To view the demo: clone the repo, run `npm i`, `npm run build`, `npm start`
 
 ## API
@@ -25,10 +25,10 @@ Native Angular2 directive for [Vizabi](https://github.com/vizabi/vizabi) compone
 
   * `readerModuleObject` (`?any`) - object (separate module that contains method to get reader's object); undefined by default
   * `readerGetMethod` (`?string`) - method name (to get reader's object) in `readerModuleObject`; undefined by default
-  * `readerParams` (`?Array<any>`) - parameters for `readerGetMethod`; undefined by default
+  * `readerPlugins` (`?Array<any>`) - parameters for `readerGetMethod`; undefined by default
   * `readerName` (`?string`) - reader's name; undefined by default
   * `model` (`any`) - model for current `Vizabi` instance
-  * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default 
+  * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default
   * `translations` (`any`) - translations for current `Vizabi` instance
   * `chartType` (`string`) - chart type for current `Vizabi` instance
 
@@ -64,17 +64,17 @@ Put content from `demo/dist` to your `gh-pages` branch.
 
 ## Troubleshooting
 
-Known problems:  
-> `npm run build`  
-> `cp` is not recognized as an internal or external command, operable program or batch file.  
+Known problems:
+> `npm run build`
+> `cp` is not recognized as an internal or external command, operable program or batch file.
 
 You are using windows command prompt that sucks. [Cygwin](http://www.cygwin.com/) solves it. Or use [git bash](https://git-scm.com/). Or use linux/mac.
 
-> `npm run build` fails  
+> `npm run build` fails
 
 try updating your node/npm. Last time i checked the app it was working and i had node v6.10.2, npm v3.10.10
 
-Please follow this guidelines when reporting bugs and feature requests:  
+Please follow this guidelines when reporting bugs and feature requests:
 1. Use [GitHub Issues](https://github.com/vizabi/ng2-vizabi/issues) board to report bugs and feature requests (not our email address)
 2. Please **always** write steps to reproduce the error. That way we can focus on fixing the bug, not scratching our heads trying to reproduce it.
 
