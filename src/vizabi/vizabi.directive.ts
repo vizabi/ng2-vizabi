@@ -10,7 +10,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() public order: number;
   @Input() public readerModuleObject: any;
   @Input() public readerGetMethod: string;
-  @Input() public readerParams: any[];
+  @Input() public readerPlugins: any[];
   @Input() public readerName: string;
   @Input() public model: any;
   @Input() public modelHash: string;
@@ -167,8 +167,8 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private readerProcessing(): void {
     if (this.readerModuleObject && this.readerGetMethod && this.readerName &&
-      this.readerParams && this.readerModuleObject[this.readerGetMethod] && !isReaderReady[this.readerName]) {
-      const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerParams);
+      this.readerPlugins && this.readerModuleObject[this.readerGetMethod] && !isReaderReady[this.readerName]) {
+      const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerPlugins);
 
       Vizabi.Reader.extend(this.readerName, readerObject);
 
