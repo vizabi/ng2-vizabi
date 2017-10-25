@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import * as _ from 'lodash';
 
-const query = require('../../../../../node_modules/vizabi-config-systema_globalis/BubbleChart.json');
+const query = require('../../../../../node_modules/vizabi-config-systema_globalis/dist/BubbleChart.json');
 
 declare const DDFCsvReader: any;
 
