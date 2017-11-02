@@ -25,10 +25,11 @@ Native Angular2 directive for [Vizabi](https://github.com/vizabi/vizabi) compone
 
   * `readerModuleObject` (`?any`) - object (separate module that contains method to get reader's object); undefined by default
   * `readerGetMethod` (`?string`) - method name (to get reader's object) in `readerModuleObject`; undefined by default
-  * `readerPlugins` (`?Array<any>`) - parameters for `readerGetMethod` as different kind of objects depending on reader functionality
+  * `readerPlugins` (`?any[]`) - parameters for `readerGetMethod` as different kind of objects depending on reader functionality
   * `readerName` (`?string`) - reader's name; undefined by default
   * `model` (`any`) - model for current `Vizabi` instance
   * `modelHash` (`?string`) - hash (url encoded) with extra data for `model`; undefined by default
+  * `additionalItems` (?any[]) - additional items that should be added as `data_...` section of model: it will be an additional csv file or DDF folder
   * `translations` (`any`) - translations for current `Vizabi` instance
   * `chartType` (`string`) - chart type for current `Vizabi` instance
 
