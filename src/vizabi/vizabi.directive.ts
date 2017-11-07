@@ -32,6 +32,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private isInitError: boolean = false;
   private _active: boolean = false;
   private _modelHash: string;
+  private _language: string;
   private _additionalItems: any[] = [];
 
   public constructor(element: ElementRef, vService: VizabiService) {
@@ -49,6 +50,19 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
     if (!this._active) {
       this.deactivate();
+    }
+  }
+
+  @Input('language')
+  public get language(): string {
+    return this._language;
+  }
+
+  public set language(_language: string) {
+    this._language = _language;
+
+    if (this.component && this.component.instance && this.component.instance.model && this.component.instance.model.locale) {
+      this.component.instance.model.locale.set('id', _language);
     }
   }
 
@@ -109,7 +123,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       try {
         this.minInitialModel = Vizabi.utils.deepClone(this.model);
         this.stopUrlRedirect = this.stopUrlRedirect || false;
-        this.component = { instance: null };
+        this.component = {instance: null};
         this.order = this.order || 1;
         this.createView();
         this.readerProcessing();
@@ -226,7 +240,12 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   private onPersistentChange() {
-    const minModelDiff = this.component.instance.getPersistentMinimalModel(this.minInitialModel);
+    const minModelDiff = this.component.instance.getPersistentMinimalModel(this.model);
+
+    if (!minModelDiff || Object.keys(minModelDiff).length <= 0) {
+      return false;
+    }
+
     const modelState = this.vService.modelToString(minModelDiff);
 
     // check if something changed
