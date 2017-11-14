@@ -8,7 +8,7 @@ import { BubbleChartDemoComponent } from './components/vizabi/bubble-chart-demo.
 import { ArabicBubbleChartDemoComponent } from './components/vizabi/arabic-bubble-chart-demo.component';
 import { DemoHeaderComponent } from './components/demo-header';
 
-import { TabsModule, CollapseModule, ButtonsModule } from 'ng2-bootstrap';
+import { TabsModule, CollapseModule, ButtonsModule } from 'ngx-bootstrap';
 import { VizabiModule } from 'ng2-vizabi';
 
 import { AppComponent } from './app.component';
