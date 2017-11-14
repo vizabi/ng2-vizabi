@@ -12,7 +12,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() public readerGetMethod: string;
   @Input() public readerPlugins: any[];
   @Input() public readerName: string;
-  @Input() public model: any;
   @Input() public extResources: any;
   @Input() public chartType: string;
   @Input() public stopUrlRedirect: boolean;
@@ -32,6 +31,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private isInitError: boolean = false;
   private _active: boolean = false;
   private _modelHash: string;
+  private _model: any;
   private _language: string;
   private _additionalItems: any[] = [];
 
@@ -77,7 +77,19 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
     if (this.component && this.component.instance) {
       this.component.instance.setModel(this.model);
+      // console.log('NG2-VIZABI set modelHash', this.model);
     }
+  }
+
+  @Input('model')
+  public get model() {
+    return this._model;
+  }
+
+  public set model(_model) {
+    this._model = _model;
+
+    // console.log('NG2-MODEL', this._model);
   }
 
   @Input('additionalItems')
@@ -105,6 +117,8 @@ export class VizabiDirective implements OnInit, OnDestroy {
         Vizabi._instances[this.component.instance._id] = null;
         this.component.instance.clear();
         this.component.instance = Vizabi(this.chartType, this.view, newModel);
+
+        // console.log('NG2-VIZABI new instance', newModel);
 
         this.onChanged.emit({
           order: this.order,
@@ -209,7 +223,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
       const str = encodeURI(decodeURIComponent(this.modelHash));
       const urlModel = this.vService.stringToModel(str);
 
-      Vizabi.utils.deepExtend(this.model, urlModel);
+      this.model = Vizabi.utils.deepExtend({}, this.minInitialModel, urlModel);
     }
   }
 
