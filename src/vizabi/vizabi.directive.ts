@@ -255,11 +255,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
   private onPersistentChange() {
     const minModelDiff = this.component.instance.getPersistentMinimalModel(this.model);
-
-    if (!minModelDiff || Object.keys(minModelDiff).length <= 0) {
-      return false;
-    }
-
     const modelState = this.vService.modelToString(minModelDiff);
 
     // check if something changed
