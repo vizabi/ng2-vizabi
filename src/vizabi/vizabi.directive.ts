@@ -77,7 +77,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
 
     if (this.component && this.component.instance) {
       this.component.instance.setModel(this.model);
-      // console.log('NG2-VIZABI set modelHash', this.model);
+      console.log(1, 'NG2-VIZABI set modelHash', this.model);
     }
   }
 
@@ -89,7 +89,7 @@ export class VizabiDirective implements OnInit, OnDestroy {
   public set model(_model) {
     this._model = _model;
 
-    // console.log('NG2-MODEL', this._model);
+    console.log(2, 'NG2-MODEL', this._model);
   }
 
   @Input('additionalItems')
@@ -254,8 +254,17 @@ export class VizabiDirective implements OnInit, OnDestroy {
   }
 
   private onPersistentChange() {
+    console.log('onPersistentChange');
     const minModelDiff = this.component.instance.getPersistentMinimalModel(this.model);
     const modelState = this.vService.modelToString(minModelDiff);
+
+    if (Object.keys(minModelDiff).length <= 0) {
+      console.log('empty minModelDiff!');
+      return false;
+    }
+
+    // console.log('NG2-VIZABI modelState', this.component.instance.getModel().state.marker.color, minModelDiff.state.marker.color);
+    console.log('NG2-VIZABI modelState', ' instance.getModel=', this.component.instance.getModel().state, ' model.state=', this.model.state, ' minModelDiff=', minModelDiff);
 
     // check if something changed
     if (modelState === this.modelState) {
