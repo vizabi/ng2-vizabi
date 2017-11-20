@@ -1,4 +1,7 @@
-import { EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef } from '@angular/core';
+import {
+  EventEmitter, Input, Output, OnInit, OnDestroy, Directive, ElementRef, OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import { VizabiService } from './vizabi.service';
 
 let isReaderReady: any = {};
@@ -6,7 +9,7 @@ let isReaderReady: any = {};
 @Directive({
   selector: 'vizabi'
 })
-export class VizabiDirective implements OnInit, OnDestroy {
+export class VizabiDirective implements OnInit, OnDestroy, OnChanges {
   @Input() public order: number;
   @Input() public readerModuleObject: any;
   @Input() public readerGetMethod: string;
@@ -15,6 +18,8 @@ export class VizabiDirective implements OnInit, OnDestroy {
   @Input() public extResources: any;
   @Input() public chartType: string;
   @Input() public stopUrlRedirect: boolean;
+  @Input() public modelHash: string;
+  @Input() public model;
 
   @Output() public onClick: EventEmitter<any> = new EventEmitter();
   @Output() public onCreated: EventEmitter<any> = new EventEmitter();
@@ -30,14 +35,31 @@ export class VizabiDirective implements OnInit, OnDestroy {
   private minInitialModel: any;
   private isInitError: boolean = false;
   private _active: boolean = false;
-  private _modelHash: string;
-  private _model: any;
   private _language: string;
   private _additionalItems: any[] = [];
 
   public constructor(element: ElementRef, vService: VizabiService) {
     this.element = element;
     this.vService = vService;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.model && changes.model.isFirstChange()) {
+      this.minInitialModel = Vizabi.utils.deepClone(changes.model.currentValue);
+    }
+
+    if (changes.modelHash && changes.modelHash && this.minInitialModel) {
+      const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
+      const urlModel = this.vService.stringToModel(str);
+
+      this.model = Vizabi.utils.deepExtend({}, this.minInitialModel, urlModel);
+
+      if (this.component && this.component.instance) {
+        this.component.instance.setModel(this.model);
+      }
+
+      console.log('NG2-VIZABI model changed: ', this.model);
+    }
   }
 
   @Input('active')
@@ -64,32 +86,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
     if (this.component && this.component.instance && this.component.instance.model && this.component.instance.model.locale) {
       this.component.instance.model.locale.set('id', _language);
     }
-  }
-
-  @Input('modelHash')
-  public get modelHash(): string {
-    return this._modelHash;
-  }
-
-  public set modelHash(_modelHash: string) {
-    this._modelHash = _modelHash;
-    this.modelHashProcessing();
-
-    if (this.component && this.component.instance) {
-      this.component.instance.setModel(this.model);
-      console.log(1, 'NG2-VIZABI set modelHash', this.model);
-    }
-  }
-
-  @Input('model')
-  public get model() {
-    return this._model;
-  }
-
-  public set model(_model) {
-    this._model = _model;
-
-    console.log(2, 'NG2-MODEL', this._model);
   }
 
   @Input('additionalItems')
@@ -135,14 +131,13 @@ export class VizabiDirective implements OnInit, OnDestroy {
   public ngOnInit(): void {
     setTimeout(() => {
       try {
-        this.minInitialModel = Vizabi.utils.deepClone(this.model);
         this.stopUrlRedirect = this.stopUrlRedirect || false;
         this.component = {instance: null};
         this.order = this.order || 1;
         this.createView();
         this.readerProcessing();
         this.setExtResources();
-        this.modelHashProcessing();
+        // this.modelHashProcessing();
         this.persistentChangeProcessing();
         this.readyOnceProcessing();
         if (this._additionalItems && this._additionalItems.length > 0) {
@@ -215,15 +210,6 @@ export class VizabiDirective implements OnInit, OnDestroy {
       Vizabi.Reader.extend(this.readerName, readerObject);
 
       isReaderReady[this.readerName] = true;
-    }
-  }
-
-  private modelHashProcessing(): void {
-    if (this.modelHash) {
-      const str = encodeURI(decodeURIComponent(this.modelHash));
-      const urlModel = this.vService.stringToModel(str);
-
-      this.model = Vizabi.utils.deepExtend({}, this.minInitialModel, urlModel);
     }
   }
 
