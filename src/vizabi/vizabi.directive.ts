@@ -95,7 +95,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
         }
       }
 
-      console.log('NG2-VIZABI model changed: ', this.currentModel);
+      console.log('NG2-VIZABI model created: ', this.currentModel);
     } else if (changes.modelHash) {
       const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
       const urlModel = this.vService.stringToModel(str);
@@ -105,6 +105,8 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       this.persistentChangeProcessing();
       this.readyOnceProcessing();
       this.component.instance.setModel(this.currentModel);
+
+      console.log('NG2-VIZABI model changed: ', this.currentModel);
     }
   }
 
@@ -282,7 +284,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   }
 
   private onPersistentChange2(aaa) {
-    console.log('onPersistentChange', aaa);
+    console.log('onPersistentChange2', aaa.source._component.getPersistentMinimalModel(aaa.source._component.getModel()));
     const minModelDiff = this.component.instance.getPersistentMinimalModel(this.currentModel);
     const modelState = this.vService.modelToString(minModelDiff);
 
@@ -292,7 +294,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     }
 
     // console.log('NG2-VIZABI modelState', this.component.instance.getModel().state.marker.color, minModelDiff.state.marker.color);
-    console.log('NG2-VIZABI modelState2', ' instance.getModel=', this.component.instance.getModel().state, ' model.state=', this.currentModel.state, ' minModelDiff=', minModelDiff);
+    console.log('NG2-VIZABI modelState2', ' instance.getModel=', this.component.instance.getModel().state, ' model.state=', this.currentModel.state, ' minModelDiff=', minModelDiff, aaa.source._component.getModel());
 
     // check if something changed
     if (modelState === this.modelState) {
