@@ -46,7 +46,7 @@ Native Angular2 directive for [Vizabi](https://github.com/vizabi/vizabi) compone
 ```
 npm run build
 cd dist
-npm pun publish
+npm publish
 ```
 
 Important note. Don't publish this project from root directory.
