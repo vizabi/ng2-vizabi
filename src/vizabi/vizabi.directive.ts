@@ -198,6 +198,9 @@ export class VizabiDirective implements OnDestroy, OnChanges {
 
   private onPersistentChange() {
     const minModelDiff = this.viz.getPersistentMinimalModel(this.vizabiPageModel);
+
+    delete minModelDiff.bind;
+
     const minModelDiffStr = JSON.stringify(minModelDiff);
 
     if (minModelDiffStr === this.prevStateStr) {
