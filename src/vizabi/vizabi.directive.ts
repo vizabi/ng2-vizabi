@@ -45,9 +45,11 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.modelHash && changes.model && changes.model.isFirstChange()) {
+    if (changes.model && changes.model.isFirstChange()) {
       this.createChart(changes);
-    } else if (changes.modelHash) {
+    }
+
+    if (this.viz && changes.modelHash) {
       const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
       const urlModel = this.vService.stringToModel(str);
       const tempModel = Vizabi.utils.deepExtend({}, this.vizabiModel, urlModel);
@@ -133,8 +135,13 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     setTimeout(() => {
       this.vizabiModel = {};
 
-      const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
-      const urlModel = this.vService.stringToModel(str);
+      let urlModel = {};
+
+      if (changes.modelHash) {
+        const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
+
+        urlModel = this.vService.stringToModel(str);
+      }
 
       this.vizabiModel.bind = {
         ready: () => {
@@ -144,7 +151,12 @@ export class VizabiDirective implements OnDestroy, OnChanges {
           this.onPersistentChange();
         },
         readyOnce: () => {
-          this.onCreated.emit({order: this.order, type: this.chartType, model: this.vizabiModel});
+          this.onReadyOnce.emit({
+            order: this.order,
+            type: this.chartType,
+            minInitialModel: this.model,
+            component: this.viz
+          });
         }
       };
 
@@ -160,6 +172,13 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       // console.log('NG2-VIZABI create', fullModel);
 
       this.viz = Vizabi(this.chartType, this.placeholder, fullModel);
+
+      this.onCreated.emit({
+        order: this.order,
+        type: this.chartType,
+        model: this.vizabiPageModel,
+        component: this.viz
+      });
     });
   }
 
