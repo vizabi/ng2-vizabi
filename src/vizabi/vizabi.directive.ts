@@ -51,12 +51,15 @@ export class VizabiDirective implements OnDestroy, OnChanges {
 
     if (this.viz && changes.modelHash) {
       const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
-      const urlModel = this.vService.stringToModel(str);
-      const tempModel = Vizabi.utils.deepExtend({}, this.vizabiModel, urlModel);
 
-      // console.log('NG2-VIZABI set model hash ', tempModel);
+      if (str) {
+        const urlModel = this.vService.stringToModel(str);
+        const tempModel = Vizabi.utils.deepExtend({}, this.vizabiModel, urlModel);
 
-      this.viz.setModel(tempModel);
+        // console.log('NG2-VIZABI set model hash ', tempModel);
+
+        this.viz.setModel(tempModel);
+      }
     }
   }
 
@@ -140,7 +143,9 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       if (changes.modelHash) {
         const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
 
-        urlModel = this.vService.stringToModel(str);
+        if (str) {
+          urlModel = this.vService.stringToModel(str);
+        }
       }
 
       this.vizabiModel.bind = {
