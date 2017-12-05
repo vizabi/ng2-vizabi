@@ -1,7 +1,7 @@
 {
   "name": "ng2-vizabi-base",
   "private": false,
-  "version": "3.0.10",
+  "version": "3.0.11",
   "description": "angular2 vizabi component",
   "scripts": {
     "lite-server": "lite-server -c demo/bs-config.json",
@@ -153,5 +153,8 @@
       "email": "valorkin@gmail.com",
       "url": "https://github.com/valorkin"
     }
-  ]
+  ],
+  "dependencies": {
+    "ng2-vizabi": "file:dist"
+  }
 }

@@ -2,7 +2,9 @@ import {
   EventEmitter, Input, Output, OnDestroy, Directive, ElementRef, OnChanges,
   SimpleChanges
 } from '@angular/core';
+import * as urlon from 'urlon';
 import { VizabiService } from './vizabi.service';
+import { PlatformLocation } from '@angular/common';
 
 const isReaderReady: any = {};
 
@@ -31,17 +33,39 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   private vizabiModel;
   private vizabiPageModel;
   private placeholder;
-  private element: ElementRef;
-  private vService: VizabiService;
   private _active = false;
   private _language: string;
   private _additionalItems: any[] = [];
   private prevStateStr;
+  private poppedState = null;
 
-  public constructor(element: ElementRef, vService: VizabiService) {
-    this.element = element;
-    this.vService = vService;
+  public constructor(private element: ElementRef, private vService: VizabiService, private location: PlatformLocation) {
     this.createPlaceholder();
+
+    /*location.onHashChange((e: any) => {
+      const pos = e.newURL.indexOf('#');
+      const str = e.newURL.substr(pos + 1);
+
+      console.log('!!!!!!', str);
+
+      const urlModel = this.vService.stringToModel(str);
+      const tempModel = Vizabi.utils.deepExtend({}, this.vizabiPageModel, urlModel, true);
+
+      console.log('__NG2-VIZABI setModel hash ', str, tempModel);
+
+      this.viz.setModel(tempModel, false, false);
+    });*/
+
+    location.onPopState((e: any) => {
+      if (e.state) {
+        this.poppedState = e.state.model;
+        this.viz.setModel(Vizabi.utils.deepExtend({}, this.poppedState, true), false, false);
+
+        // console.log('NG2-VIZABI POP setModel', this.poppedState);
+      } else {
+        this.poppedState = null;
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -49,16 +73,18 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       this.createChart(changes);
     }
 
+    /*
     if (this.viz && changes.modelHash && changes.modelHash.currentValue) {
       const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
 
       const urlModel = this.vService.stringToModel(str);
       const tempModel = Vizabi.utils.deepExtend({}, this.vizabiModel, urlModel, true);
 
-      // console.log('NG2-VIZABI set model hash ', tempModel);
+      console.log('NG2-VIZABI setModel hash ', str, tempModel);
 
-      this.viz.setModel(tempModel);
+      this.viz.setModel(tempModel, false, false);
     }
+    */
   }
 
   @Input('active')
@@ -80,6 +106,10 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   }
 
   public set language(_language: string) {
+    if (!_language) {
+      return;
+    }
+
     this._language = _language;
 
     if (this.viz && this.viz.model && this.viz.model.locale) {
@@ -217,6 +247,10 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   }
 
   private onPersistentChange() {
+    if (this.poppedState && Vizabi.utils.comparePlainObjects(this.viz.getModel(), this.poppedState)) {
+      return;
+    }
+
     const minModelDiff = this.viz.getPersistentMinimalModel(this.vizabiPageModel);
 
     delete minModelDiff.bind;
@@ -230,18 +264,29 @@ export class VizabiDirective implements OnDestroy, OnChanges {
 
     // console.log('NG2-VIZABI onPersistentChange++', minModelDiff);
 
+    if (!this.stopUrlRedirect && window && window.location) {
+      const state = Vizabi.utils.deepExtend({}, {
+        tool: this.chartType,
+        model: this.viz.getModel()
+      }, true);
+      this.location.pushState(state, 'Title', `#${this.vService.modelToString(minModelDiff)}`);
+
+      /*
+      console.log('NG2-VIZABI PUSH', {
+        tool: this.chartType,
+        model: this.viz.getModel()
+      }, 'Title', `#${urlon.stringify(minModelDiff)}`);
+      */
+    }
+
+    this.prevStateStr = minModelDiffStr;
+
     this.onChanged.emit({
       order: this.order,
       type: this.chartType,
       modelDiff: minModelDiff,
       minInitialModel: this.model
     });
-
-    if (!this.stopUrlRedirect && window && window.location) {
-      window.location.hash = this.vService.modelToString(minModelDiff);
-    }
-
-    this.prevStateStr = minModelDiffStr;
   }
 
   private deactivate(): void {
