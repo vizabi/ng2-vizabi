@@ -2,32 +2,30 @@ import {
   EventEmitter, Input, Output, OnDestroy, Directive, ElementRef, OnChanges,
   SimpleChanges
 } from '@angular/core';
-import * as urlon from 'urlon';
 import { VizabiService } from './vizabi.service';
 import { PlatformLocation } from '@angular/common';
 
-const isReaderReady: any = {};
+const isReaderReady = {};
 
 @Directive({
   selector: 'vizabi'
 })
 export class VizabiDirective implements OnDestroy, OnChanges {
-  @Input() public order: number;
-  @Input() public readerModuleObject: any;
-  @Input() public readerGetMethod: string;
-  @Input() public readerPlugins: any[];
-  @Input() public readerName: string;
-  @Input() public extResources: any;
-  @Input() public chartType: string;
-  @Input() public stopUrlRedirect: boolean;
-  @Input() public modelHash: string;
-  @Input() public model;
+  @Input() order: number;
+  @Input() readerModuleObject;
+  @Input() readerGetMethod: string;
+  @Input() readerPlugins: any[];
+  @Input() readerName: string;
+  @Input() chartType: string;
+  @Input() stopUrlRedirect: boolean;
+  @Input() modelHash: string;
+  @Input() model;
 
-  @Output() public onClick: EventEmitter<any> = new EventEmitter();
-  @Output() public onCreated: EventEmitter<any> = new EventEmitter();
-  @Output() public onChanged: EventEmitter<any> = new EventEmitter();
-  @Output() public onReadyOnce: EventEmitter<any> = new EventEmitter();
-  @Output() public onError: EventEmitter<any> = new EventEmitter();
+  @Output() onClick: EventEmitter<any> = new EventEmitter();
+  @Output() onCreated: EventEmitter<any> = new EventEmitter();
+  @Output() onChanged: EventEmitter<any> = new EventEmitter();
+  @Output() onReadyOnce: EventEmitter<any> = new EventEmitter();
+  @Output() onError: EventEmitter<any> = new EventEmitter();
 
   private viz;
   private vizabiModel;
@@ -36,25 +34,12 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   private _active = false;
   private _language: string;
   private _additionalItems: any[] = [];
+  private _reloadTime: number;
   private prevStateStr;
   private poppedState = null;
 
-  public constructor(private element: ElementRef, private vService: VizabiService, private location: PlatformLocation) {
+  constructor(private element: ElementRef, private vService: VizabiService, private location: PlatformLocation) {
     this.createPlaceholder();
-
-    /*location.onHashChange((e: any) => {
-      const pos = e.newURL.indexOf('#');
-      const str = e.newURL.substr(pos + 1);
-
-      console.log('!!!!!!', str);
-
-      const urlModel = this.vService.stringToModel(str);
-      const tempModel = Vizabi.utils.deepExtend({}, this.vizabiPageModel, urlModel, true);
-
-      console.log('__NG2-VIZABI setModel hash ', str, tempModel);
-
-      this.viz.setModel(tempModel, false, false);
-    });*/
 
     location.onPopState((e: any) => {
       if (e.state) {
@@ -68,31 +53,24 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     });
   }
 
+  static removeElement(element: any) {
+    if (element && element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.model && changes.model.isFirstChange()) {
       this.createChart(changes);
     }
-
-    /*
-    if (this.viz && changes.modelHash && changes.modelHash.currentValue) {
-      const str = encodeURI(decodeURIComponent(changes.modelHash.currentValue));
-
-      const urlModel = this.vService.stringToModel(str);
-      const tempModel = Vizabi.utils.deepExtend({}, this.vizabiModel, urlModel, true);
-
-      console.log('NG2-VIZABI setModel hash ', str, tempModel);
-
-      this.viz.setModel(tempModel, false, false);
-    }
-    */
   }
 
   @Input('active')
-  public get active(): boolean {
+  get active(): boolean {
     return this._active;
   }
 
-  public set active(_active: boolean) {
+  set active(_active: boolean) {
     this._active = _active;
 
     if (!this._active) {
@@ -101,11 +79,11 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   }
 
   @Input('language')
-  public get language(): string {
+  get language(): string {
     return this._language;
   }
 
-  public set language(_language: string) {
+  set language(_language: string) {
     if (!_language) {
       return;
     }
@@ -118,11 +96,11 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   }
 
   @Input('additionalItems')
-  public get additionalItems(): any[] {
+  get additionalItems(): any[] {
     return this._additionalItems;
   }
 
-  public set additionalItems(_additionalItems: any[]) {
+  set additionalItems(_additionalItems: any[]) {
     try {
       this._additionalItems = _additionalItems;
 
@@ -143,7 +121,33 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     }
   }
 
-  public ngOnDestroy(): void {
+  @Input('reloadTime')
+  get reloadTime() {
+    return this._reloadTime;
+  }
+
+  set reloadTime(_reloadTime: number) {
+    try {
+      if (!this.viz) {
+        return;
+      }
+
+      this._reloadTime = _reloadTime;
+
+      this.viz.clear();
+      VizabiDirective.removeElement(this.placeholder);
+
+      this.createPlaceholder();
+      this.createChart({
+        modelHash: {currentValue: this.modelHash},
+        model: {currentValue: this.model}
+      });
+    } catch (additionalItemsError) {
+      this.emitError(additionalItemsError);
+    }
+  }
+
+  ngOnDestroy() {
     try {
       Object.keys(Vizabi._instances).forEach((instanceKey: any) => {
         Vizabi._instances[instanceKey] = null;
@@ -156,11 +160,6 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     }
   }
 
-  static removeElement(element: any): void {
-    if (element && element.parentNode) {
-      element.parentNode.removeChild(element);
-    }
-  }
 
   private createChart(changes) {
     setTimeout(() => {
@@ -231,11 +230,11 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     return result;
   }
 
-  private emitError(error: any): void {
+  private emitError(error: any) {
     this.onError.emit({message: error.message, stack: error.stack});
   }
 
-  private readerProcessing(): void {
+  private readerProcessing() {
     if (this.readerModuleObject && this.readerGetMethod && this.readerName &&
       this.readerPlugins && this.readerModuleObject[this.readerGetMethod] && !isReaderReady[this.readerName]) {
       const readerObject = this.readerModuleObject[this.readerGetMethod].apply(this, this.readerPlugins);
@@ -252,9 +251,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     }
 
     const minModelDiff = this.viz.getPersistentMinimalModel(this.vizabiPageModel);
-
     delete minModelDiff.bind;
-
     const minModelDiffStr = JSON.stringify(minModelDiff);
 
     if (minModelDiffStr === this.prevStateStr) {
@@ -271,12 +268,8 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       }, true);
       this.location.pushState(state, 'Title', `#${this.vService.modelToString(minModelDiff)}`);
 
-      /*
-      console.log('NG2-VIZABI PUSH', {
-        tool: this.chartType,
-        model: this.viz.getModel()
-      }, 'Title', `#${urlon.stringify(minModelDiff)}`);
-      */
+      /* console.log('NG2-VIZABI PUSH', {tool: this.chartType,model: this.viz.getModel()
+      }, 'Title', `#${urlon.stringify(minModelDiff)}`); */
     }
 
     this.prevStateStr = minModelDiffStr;
@@ -289,7 +282,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     });
   }
 
-  private deactivate(): void {
+  private deactivate() {
     if (this.viz && this.viz.components) {
       this.viz.components.find((component: any) => component.name === 'gapminder-dialogs').closeAllDialogs(true);
     }

@@ -1,5 +1,6 @@
 <div style="height: 600px;">
     <button (click)="loadAdditionalData()">Load additional data</button>
+    <button (click)="reload()">Reload</button>
     <vizabi class="vizabi-placeholder"
             (onCreated)="onChartCreated($event)"
             (onChanged)="onChartChanged($event)"
@@ -11,6 +12,7 @@
             [readerName]="readerName"
             [model]="model"
             [modelHash]="modelHash"
+            [reloadTime]="reloadTime"
             [stopUrlRedirect]="stopUrlRedirect"
             [additionalItems]="additionalItems"
             [chartType]="chartType"></vizabi>
