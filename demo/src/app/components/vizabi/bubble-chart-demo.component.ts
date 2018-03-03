@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 
 const query = require('../../../../../node_modules/vizabi-config-systema_globalis/dist/BubbleChart.json');
 
@@ -10,17 +10,18 @@ declare const DDFCsvReader: any;
   templateUrl: './bubble-chart-demo.component.html'
 })
 export class BubbleChartDemoComponent {
-  public readerModuleObject: any;
-  public readerGetMethod: string;
-  public readerPlugins: any[];
-  public readerName: string;
-  public model: any;
-  public modelHash: string;
-  public chartType: string;
-  public stopUrlRedirect: boolean;
-  public additionalItems: any[] = [];
+  readerModuleObject: any;
+  readerGetMethod: string;
+  readerPlugins: any[];
+  readerName: string;
+  model: any;
+  modelHash: string;
+  chartType: string;
+  stopUrlRedirect: boolean;
+  additionalItems: any[] = [];
+  reloadTime: number = 0;
 
-  public constructor() {
+  constructor() {
     const hashPos = location.href.indexOf('#');
 
     this.readerModuleObject = DDFCsvReader;
@@ -28,7 +29,7 @@ export class BubbleChartDemoComponent {
     // this.readerPlugins = [new DDFCsvReader.FrontendFileReader(), console];
     this.readerPlugins = [new DDFCsvReader.FrontendFileReader()];
     this.readerName = 'ddf1-csv-ext';
-    this.model = _.cloneDeep(query);
+    this.model = cloneDeep(query);
     this.model.data = {
       reader: 'ddf1-csv-ext',
       splash: true,
@@ -44,7 +45,7 @@ export class BubbleChartDemoComponent {
     this.stopUrlRedirect = true;
   }
 
-  public loadAdditionalData(): void {
+  loadAdditionalData() {
     this.additionalItems = [
       {
         reader: 'csv',
@@ -57,19 +58,23 @@ export class BubbleChartDemoComponent {
     ];
   }
 
-  public onChartCreated(event: any): void {
+  reload() {
+    this.reloadTime = new Date().getTime();
+  }
+
+  onChartCreated(event: any) {
     console.log('bubble chart was created', event);
   }
 
-  public onChartChanged(event: any): void {
+  onChartChanged(event: any) {
     console.log('bubble chart was changed', event);
   }
 
-  public onChartClicked(event: any): void {
+  onChartClicked(event: any) {
     console.log('click on bubble chart', event);
   }
 
-  public onChartError(event: any): void {
+  onChartError(event: any) {
     console.log('bubble chart error', event);
   }
 }

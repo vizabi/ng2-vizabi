@@ -3,22 +3,19 @@ import * as urlon from 'urlon';
 
 @Injectable()
 export class VizabiService {
-  public modelToString(model: any): string {
-    model = model || {};
-
+  modelToString(model = {}): string {
     return urlon.stringify(model);
   }
 
-  public stringToModel(str: string): any {
-    str = str || '_';
-    if (str) {
+  stringToModel(str = '_') {
+    if (str !== '_') {
       try {
         return urlon.parse(str);
       } catch (err) {
         console.error('Urlon Exception:', err);
-        return {};
       }
     }
+
     return {};
   }
 }
