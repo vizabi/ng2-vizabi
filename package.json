@@ -154,8 +154,5 @@
       "email": "valorkin@gmail.com",
       "url": "https://github.com/valorkin"
     }
-  ],
-  "dependencies": {
-    "ng2-vizabi": "file:dist"
-  }
+  ]
 }

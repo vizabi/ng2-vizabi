@@ -20,6 +20,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   @Input() stopUrlRedirect: boolean;
   @Input() modelHash: string;
   @Input() model;
+  @Input() restoreStateAfterReload: boolean;
 
   @Output() onClick: EventEmitter<any> = new EventEmitter();
   @Output() onCreated: EventEmitter<any> = new EventEmitter();
@@ -134,6 +135,8 @@ export class VizabiDirective implements OnDestroy, OnChanges {
 
       this._reloadTime = _reloadTime;
 
+      const currentModel = Object.assign({}, this.viz.getPersistentModel());
+
       this.viz.clear();
       VizabiDirective.removeElement(this.placeholder);
 
@@ -141,7 +144,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       this.createChart({
         modelHash: {currentValue: this.modelHash},
         model: {currentValue: this.model}
-      });
+      }, currentModel);
     } catch (additionalItemsError) {
       this.emitError(additionalItemsError);
     }
@@ -161,7 +164,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   }
 
 
-  private createChart(changes) {
+  private createChart(changes, currentSavedModel = null) {
     setTimeout(() => {
       this.vizabiModel = {};
 
@@ -176,6 +179,9 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       this.vizabiModel.bind = {
         ready: () => {
           this.onPersistentChange();
+          if (currentSavedModel && this.restoreStateAfterReload) {
+            this.viz.setModel(currentSavedModel);
+          }
         },
         persistentChange: () => {
           this.onPersistentChange();

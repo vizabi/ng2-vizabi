@@ -19,7 +19,8 @@ export class BubbleChartDemoComponent {
   chartType: string;
   stopUrlRedirect: boolean;
   additionalItems: any[] = [];
-  reloadTime: number = 0;
+  reloadTime = 0;
+  restoreAfterReload = false;
 
   constructor() {
     const hashPos = location.href.indexOf('#');

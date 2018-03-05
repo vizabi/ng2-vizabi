@@ -1,6 +1,7 @@
 <div style="height: 600px;">
     <button (click)="loadAdditionalData()">Load additional data</button>
     <button (click)="reload()">Reload</button>
+    <label><input type="checkbox" [checked]="restoreAfterReload" (change)="restoreAfterReload = !restoreAfterReload" /> Restore after reload</label>
     <vizabi class="vizabi-placeholder"
             (onCreated)="onChartCreated($event)"
             (onChanged)="onChartChanged($event)"
@@ -13,6 +14,7 @@
             [model]="model"
             [modelHash]="modelHash"
             [reloadTime]="reloadTime"
+            [restoreStateAfterReload]="restoreAfterReload"
             [stopUrlRedirect]="stopUrlRedirect"
             [additionalItems]="additionalItems"
             [chartType]="chartType"></vizabi>

@@ -35,7 +35,8 @@ Native Angular2 directive for [Vizabi](https://github.com/vizabi/vizabi) compone
   * `active (`?boolean`) - this flag could be useful to indicate active tab of many tabs
   * `language (`?string`) - current language, it might be passed to `Vizabi` as-is
   * `additionalItems` (?any[]) - additional items that should be added as `data_...` section of model: it will be an additional csv file or DDF folder
-  * `reloadTime (`?number`) -
+  * `reloadTime` (`?number`) - put reload time, after that current chart will be reloaded
+  * `restoreAfterReload` (`?boolean`) - current chart state will be restored after `reloadTime` activity
 
 ### Outputs (Events)
 
