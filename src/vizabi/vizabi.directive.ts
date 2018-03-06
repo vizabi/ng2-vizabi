@@ -205,6 +205,8 @@ export class VizabiDirective implements OnDestroy, OnChanges {
 
       const fullModel = Vizabi.utils.deepExtend({}, this.vizabiModel, urlModel, true);
 
+      fullModel.data._lastModified = new Date().getTime();
+
       // console.log('NG2-VIZABI create', fullModel);
 
       this.viz = Vizabi(this.chartType, this.placeholder, fullModel);
@@ -261,11 +263,8 @@ export class VizabiDirective implements OnDestroy, OnChanges {
     const minModelDiffStr = JSON.stringify(minModelDiff);
 
     if (minModelDiffStr === this.prevStateStr) {
-      // console.log('NG2-VIZABI onPersistentChange--');
       return false;
     }
-
-    // console.log('NG2-VIZABI onPersistentChange++', minModelDiff);
 
     if (!this.stopUrlRedirect && window && window.location) {
       const state = Vizabi.utils.deepExtend({}, {
@@ -273,9 +272,6 @@ export class VizabiDirective implements OnDestroy, OnChanges {
         model: this.viz.getModel()
       }, true);
       this.location.pushState(state, 'Title', `#${this.vService.modelToString(minModelDiff)}`);
-
-      /* console.log('NG2-VIZABI PUSH', {tool: this.chartType,model: this.viz.getModel()
-      }, 'Title', `#${urlon.stringify(minModelDiff)}`); */
     }
 
     this.prevStateStr = minModelDiffStr;
