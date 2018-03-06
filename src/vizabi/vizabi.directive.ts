@@ -129,7 +129,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
 
   set reloadTime(_reloadTime: number) {
     try {
-      if (!this.viz) {
+      if (!this.viz || !_reloadTime) {
         return;
       }
 

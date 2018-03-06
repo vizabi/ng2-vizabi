@@ -19,7 +19,7 @@ export class BubbleChartDemoComponent {
   chartType: string;
   stopUrlRedirect: boolean;
   additionalItems: any[] = [];
-  reloadTime = 0;
+  reloadTime;
   restoreAfterReload = false;
 
   constructor() {
