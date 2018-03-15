@@ -242,7 +242,7 @@ export class VizabiDirective implements OnDestroy, OnChanges {
   }
 
   private emitError(error: any) {
-    this.onError.emit({message: error.message, stack: error.stack});
+    this.onError.emit(error);
   }
 
   private readerProcessing() {
