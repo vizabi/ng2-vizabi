@@ -7,15 +7,19 @@ export class VizabiService {
     return urlon.stringify(model);
   }
 
-  stringToModel(str = '_') {
-    if (str !== '_') {
+  stringToModel(strPar: string) {
+    const str = strPar || '_';
+
+    let result = {};
+
+    if (str) {
       try {
-        return urlon.parse(str);
+        result = urlon.parse(str);
       } catch (err) {
         console.error('Urlon Exception:', err);
       }
     }
 
-    return {};
+    return result;
   }
 }

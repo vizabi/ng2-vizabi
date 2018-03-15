@@ -193,6 +193,9 @@ export class VizabiDirective implements OnDestroy, OnChanges {
             minInitialModel: this.model,
             component: this.viz
           });
+        },
+        'load_error': (error: any) => {
+          this.emitError(error);
         }
       };
 

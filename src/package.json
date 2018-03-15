@@ -1,6 +1,6 @@
 {
   "name": "ng2-vizabi",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "main": "bundles/ng2-vizabi.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
