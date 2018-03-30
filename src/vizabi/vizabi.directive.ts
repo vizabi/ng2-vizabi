@@ -207,8 +207,10 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       delete this.vizabiPageModel.bind;
 
       const fullModel = Vizabi.utils.deepExtend({}, this.vizabiModel, urlModel, true);
+      const lastModified = new Date().getTime();
 
-      fullModel.data._lastModified = new Date().getTime();
+      fullModel.data._lastModified = lastModified;
+      fullModel.data.lastModified = lastModified;
 
       // console.log('NG2-VIZABI create', fullModel);
 
