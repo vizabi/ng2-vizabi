@@ -142,9 +142,10 @@ export class VizabiDirective implements OnDestroy, OnChanges {
 
       this.createPlaceholder();
       this.createChart({
-        modelHash: {currentValue: this.modelHash},
-        model: {currentValue: this.model}
-      }, currentModel);
+        modelHash: {currentValue: ''},
+        model: {currentValue: currentModel},
+        isStateEmpty: true
+      });
     } catch (additionalItemsError) {
       this.emitError(additionalItemsError);
     }
@@ -213,6 +214,10 @@ export class VizabiDirective implements OnDestroy, OnChanges {
       fullModel.data.lastModified = lastModified;
 
       // console.log('NG2-VIZABI create', fullModel);
+
+      if (changes.isStateEmpty) {
+        delete fullModel.state;
+      }
 
       this.viz = Vizabi(this.chartType, this.placeholder, fullModel);
 
